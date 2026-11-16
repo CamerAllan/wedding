@@ -34,6 +34,41 @@ const factRow = (label, html) => `<div><dt>${esc(label)}</dt><dd>${html}</dd></d
 const mapEmbed = q => `<div class="event-map"><div class="map-frame"><iframe title="${esc(q)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
   src="https://www.google.com/maps?q=${encodeURIComponent(q)}&z=14&output=embed"></iframe></div></div>`;
 
+// ---- The night before: a festive panel, clinking glasses and a little confetti ----
+const CONFETTI = ['#91b7c4', '#2c4a56', '#d9b45a', '#c9dde4'];
+function confettiSvg(seed) {
+  let r = seed; const rnd = () => (r = (r * 9301 + 49297) % 233280) / 233280;
+  let out = '';
+  for (let i = 0; i < 30; i++) {
+    // Confetti sits in the panel's margins and along the top, clear of the text, glasses and map.
+    const top = i < 10, side = i % 2;
+    const x = top ? (side ? 60 + rnd() * 28 : 12 + rnd() * 28) : side ? 92 + rnd() * 6 : 1.5 + rnd() * 6;
+    const y = top ? 2 + rnd() * 9 : 6 + rnd() * 88;
+    const c = CONFETTI[i % CONFETTI.length], rot = Math.round(rnd() * 360), d = (rnd() * 4).toFixed(2);
+    const shape = i % 3 === 0 ? `<circle cx="5" cy="5" r="2.2" fill="${c}"/>`
+      : i % 3 === 1 ? `<rect x="3.5" y="1.5" width="3" height="7" fill="${c}"/>`
+      : `<path d="M1 5 q2 -3 4 0 t4 0" fill="none" stroke="${c}" stroke-width="1.4" stroke-linecap="round"/>`;
+    out += `<i class="bit ${top ? 'top' : 'side'}" style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%;animation-delay:-${d}s"><svg viewBox="0 0 10 10" style="transform:rotate(${rot}deg)">${shape}</svg></i>`;
+  }
+  return `<div class="confetti" aria-hidden="true">${out}</div>`;
+}
+const glass = cls => `<g class="${cls}">
+    <path class="fizz" d="M-8 -30 L8 -30 L6.5 -6 Q0 2 -6.5 -6 Z"/>
+    <path d="M-8 -30 L8 -30 L6.5 -6 Q0 2 -6.5 -6 Z" fill="none"/>
+    <path class="liquid" d="M-7.3 -20 L7.3 -20 L6.5 -6 Q0 2 -6.5 -6 Z"/>
+    <circle class="bubble" cx="-2" cy="-10" r="1"/><circle class="bubble" cx="2.5" cy="-14" r=".8" style="animation-delay:-.7s"/>
+    <circle class="bubble" cx="0" cy="-8" r=".7" style="animation-delay:-1.3s"/>
+    <path d="M0 -2 V16 M-7 16 H7" fill="none"/>
+  </g>`;
+const partyHead = () => `${confettiSvg(7)}
+  <div class="party-head" aria-hidden="true">
+    <svg class="cheers" viewBox="-40 -48 80 70">
+      ${glass('g-left')}${glass('g-right')}
+      <g class="spark"><path d="M0 -44 V-38 M-6 -41 L-3.5 -37.5 M6 -41 L3.5 -37.5"/></g>
+    </svg>
+  </div>
+  <p class="party-tag">${t('partyTag')}</p>`;
+
 withInvite(data => {
   $('events').innerHTML = eventsFor(data).map(ev => {
     const id = ev.event;
@@ -48,14 +83,16 @@ withInvite(data => {
     const rows = rowsFor(data, id);
     const factRows = [
       L(ev, 'when') ? factRow(t('when'), esc(L(ev, 'when'))) : '',
-      loc ? factRow(t('where'), `<a href="${MAP(loc)}" target="_blank" rel="noopener">${esc(loc)}</a>`) : '',
+      loc ? factRow(t('where'), esc(loc)) : '',
       ...facts.map(([k, v]) => factRow(k, esc(v)))
     ].join('');
     const text = `<div class="event-text">
         ${paras.map(p => `<p>${esc(p)}</p>`).join('')}
         ${factRows ? `<dl class="facts">${factRows}</dl>` : ''}
       </div>`;
-    return `<section class="event-section" id="${id}">
+    const party = id === 'night_before';
+    return `<section class="event-section${party ? ' party' : ''}" id="${id}">
+      ${party ? partyHead() : ''}
       <h2>${esc(title)}</h2>
       ${withMap ? `<div class="event-body">${text}${mapEmbed(loc)}</div>` : text}
       ${rows.length ? `<div class="event-timeline"><h3 class="timeline-title">${t('orderOfEvents')}</h3>${timelineHtml(rows, data, {
