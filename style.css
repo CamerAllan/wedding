@@ -551,36 +551,28 @@ summary::marker { color:var(--duck); }
 
 /* ---- The night before: a festive panel with hand-drawn doodles ---- */
 .event-section.party { position:relative; background:#eef4f6; border:1px solid var(--duck);
-  box-shadow:inset 0 0 0 5px #eef4f6, inset 0 0 0 6px var(--duck); padding:138px clamp(26px, 8vw, 72px) 30px; margin-top:40px; }
+  box-shadow:inset 0 0 0 5px #eef4f6, inset 0 0 0 6px var(--duck); padding:142px clamp(26px, 8vw, 72px) 30px; margin-top:40px; }
 .party .doodles { position:absolute; inset:6px; pointer-events:none; overflow:hidden; }
 .party .doodle { position:absolute; display:block; transform:translateX(-50%); }
-.party .doodle svg { display:block; width:100%; height:auto; overflow:visible; fill:none; stroke:var(--wine);
-  stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
-.party .doodle.side svg { stroke-width:1.8; }
-.party .doodle .pass { stroke-width:.8; opacity:.55; }
-.party .doodle.tilt svg { transform:rotate(14deg); }
-.party .disco svg { transform-origin:50% 0; animation:sway 5s ease-in-out infinite; }
+.party .doodle img { display:block; width:100%; height:auto; }
+.party .doodle.tilt img { transform:rotate(16deg); }
+.party .disco img { transform-origin:50% 0; animation:sway 5s ease-in-out infinite; }
 @keyframes sway { 0%,100% { transform:rotate(-3deg) } 50% { transform:rotate(3deg) } }
-.party .twinkle svg { transform-origin:50% 50%; animation:twinkle 2.6s ease-in-out infinite; }
-.party .twinkle.t2 svg { animation-delay:-.9s; } .party .twinkle.t3 svg { animation-delay:-1.7s; }
-@keyframes twinkle { 0%,100% { transform:scale(1) } 50% { transform:scale(.7) rotate(12deg) } }
-.party .cheers .g-left { transform-box:view-box; transform-origin:32px 60px; animation:clinkL 4s ease-in-out infinite; }
-.party .cheers .g-right { transform-box:view-box; transform-origin:62px 60px; animation:clinkR 4s ease-in-out infinite; }
-@keyframes clinkL { 0%,62%,82%,100% { transform:rotate(0) } 70% { transform:rotate(5deg) } }
-@keyframes clinkR { 0%,62%,82%,100% { transform:rotate(0) } 70% { transform:rotate(-5deg) } }
-.party .cheers .clink { opacity:0; animation:clink 4s ease-out infinite; }
-@keyframes clink { 0%,66% { opacity:0 } 72%,80% { opacity:1 } 90%,100% { opacity:0 } }
+.party .twinkle img { animation:twinkle 2.6s ease-in-out infinite; }
+.party .twinkle.t2 img { animation-delay:-.9s; } .party .twinkle.t3 img { animation-delay:-1.7s; }
+@keyframes twinkle { 0%,100% { transform:scale(1) } 50% { transform:scale(.7) rotate(10deg) } }
+.party .cheers img { transform-origin:50% 100%; animation:cheers 4s ease-in-out infinite; }
+@keyframes cheers { 0%,62%,84%,100% { transform:rotate(0) } 68% { transform:rotate(-3deg) translateY(-2px) } 76% { transform:rotate(2deg) } }
+.party .notes img { animation:bop 1.6s ease-in-out infinite; }
+@keyframes bop { 0%,100% { transform:translateY(0) rotate(0) } 50% { transform:translateY(-3px) rotate(-4deg) } }
 .party-tag { text-align:center; font:400 2rem/1 var(--script); color:var(--wine); margin:0 0 -30px; }
 .party h2 { margin-top:34px; }
-@media (prefers-reduced-motion: reduce) {
-  .party .doodle svg, .party .doodle g { animation:none !important; }
-  .party .cheers .clink { opacity:1; }
-}
+@media (prefers-reduced-motion: reduce) { .party .doodle img { animation:none !important; } }
 @media (max-width: 600px) {
-  .event-section.party { padding:128px 20px 24px; }
-  .party .disco { width:118px !important; }
+  .event-section.party { padding:132px 20px 24px; }
   .party .doodle.side { display:none; }
-  .party .cheers { left:15% !important; width:80px !important; top:52px !important; }
-  .party .notes { left:86% !important; }
-  .party .twinkle { left:31% !important; } .party .twinkle.t2 { left:69% !important; } .party .twinkle.t3 { left:74% !important; }
+  .party .disco { width:66px !important; top:-20px !important; }
+  .party .cheers { left:16% !important; width:80px !important; top:44px !important; }
+  .party .notes { left:85% !important; width:40px !important; }
+  .party .twinkle { left:32% !important; } .party .twinkle.t2 { left:68% !important; } .party .twinkle.t3 { left:72% !important; }
 }
