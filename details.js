@@ -47,12 +47,11 @@ function partyHead() {
     doodle('twinkle-1', 'twinkle t3', 69, 26, 11)
   ];
   const sides = [                                                      // in the margins, clear of the text
-    doodle('heart-1', 'side', 5, 232, 30), doodle('heart-2', 'side tilt', 5.4, 276, 19),
-    doodle('sparkler', 'side', 95, 236, 42), doodle('twinkle-2', 'side twinkle', 95.5, 420, 13),
-    doodle('popper', 'side', 4.6, 470, 34), doodle('note', 'side', 95, 540, 24), doodle('twinkle-1', 'side twinkle t2', 4.6, 600, 12)
+    doodle('heart-1', 'side', 5, 232, 30),
+    doodle('sparkler', 'side', 95, 236, 42),
+    doodle('popper', 'side', 4.6, 470, 34), doodle('note', 'side', 95, 540, 24)
   ];
-  return `<div class="doodles" aria-hidden="true">${top.join('')}${sides.join('')}</div>
-    <p class="party-tag">${t('partyTag')}</p>`;
+  return `<div class="doodles" aria-hidden="true">${top.join('')}${sides.join('')}</div>`;
 }
 
 withInvite(data => {

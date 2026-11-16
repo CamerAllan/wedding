@@ -555,19 +555,7 @@ summary::marker { color:var(--duck); }
 .party .doodles { position:absolute; inset:6px; pointer-events:none; overflow:hidden; }
 .party .doodle { position:absolute; display:block; transform:translateX(-50%); }
 .party .doodle img { display:block; width:100%; height:auto; }
-.party .doodle.tilt img { transform:rotate(16deg); }
-.party .disco img { transform-origin:50% 0; animation:sway 5s ease-in-out infinite; }
-@keyframes sway { 0%,100% { transform:rotate(-3deg) } 50% { transform:rotate(3deg) } }
-.party .twinkle img { animation:twinkle 2.6s ease-in-out infinite; }
-.party .twinkle.t2 img { animation-delay:-.9s; } .party .twinkle.t3 img { animation-delay:-1.7s; }
-@keyframes twinkle { 0%,100% { transform:scale(1) } 50% { transform:scale(.7) rotate(10deg) } }
-.party .cheers img { transform-origin:50% 100%; animation:cheers 4s ease-in-out infinite; }
-@keyframes cheers { 0%,62%,84%,100% { transform:rotate(0) } 68% { transform:rotate(-3deg) translateY(-2px) } 76% { transform:rotate(2deg) } }
-.party .notes img { animation:bop 1.6s ease-in-out infinite; }
-@keyframes bop { 0%,100% { transform:translateY(0) rotate(0) } 50% { transform:translateY(-3px) rotate(-4deg) } }
-.party-tag { text-align:center; font:400 2rem/1 var(--script); color:var(--wine); margin:0 0 -30px; }
-.party h2 { margin-top:34px; }
-@media (prefers-reduced-motion: reduce) { .party .doodle img { animation:none !important; } }
+.party h2 { margin-top:0; }
 @media (max-width: 600px) {
   .event-section.party { padding:132px 20px 24px; }
   .party .doodle.side { display:none; }
