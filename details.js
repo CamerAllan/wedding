@@ -34,20 +34,18 @@ const factRow = (label, html) => `<div><dt>${esc(label)}</dt><dd>${html}</dd></d
 const mapEmbed = q => `<div class="event-map"><div class="map-frame"><iframe title="${esc(q)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
   src="https://www.google.com/maps?q=${encodeURIComponent(q)}&z=14&output=embed"></iframe></div></div>`;
 
-// ---- The night before: a festive panel with hand-drawn party doodles (img/party, recoloured to the site's ink) ----
-const doodle = (name, cls, x, y, w) =>
-  `<i class="doodle ${cls}" style="left:${x}%;top:${y}px;width:${w}px"><img src="img/party/${name}.svg" alt=""></i>`;
-function partyHead() {
-  const top = [
-    doodle('disco', 'disco', 50, -22, 76),
-    doodle('cheers', 'cheers', 18, 34, 104),
-    doodle('notes', 'notes', 82, 42, 46),
-    doodle('twinkle-1', 'twinkle', 36, 32, 16),
-    doodle('twinkle-2', 'twinkle t2', 64, 84, 13),
-    doodle('twinkle-1', 'twinkle t3', 69, 26, 11)
-  ];
-  return `<div class="doodles" aria-hidden="true">${top.join('')}</div>`;
-}
+// ---- Each event gets a framed panel topped with hand-drawn illustrations (img/party, recoloured to the site's ink) ----
+// [file, position class, left %, top px, width px]. l / c / r and the twinkles a / b / c move a little on phones.
+const DOODLES = {
+  night_before: [['disco', 'c hang', 50, -22, 76], ['cheers', 'l', 18, 34, 104], ['notes', 'r', 82, 42, 46]],
+  wedding: [['cake', 'c', 50, 18, 98], ['bouquet', 'l', 19, 24, 66], ['tower', 'r', 81, 24, 86]],
+  morning_after: [['cloche', 'c', 50, 48, 118], ['flute', 'l', 20, 20, 34], ['strawberry', 'r', 80, 52, 46]]
+};
+const TWINKLES = [['twinkle-1', 'tw a', 36, 32, 16], ['twinkle-2', 'tw b', 64, 84, 13], ['twinkle-1', 'tw c', 69, 26, 11]];
+const doodle = ([name, cls, x, y, w]) =>
+  `<i class="doodle ${cls}" style="left:${x}%;top:${y}px;--w:${w}px"><img src="img/party/${name}.svg" alt=""></i>`;
+const eventHead = id => DOODLES[id]
+  ? `<div class="doodles" aria-hidden="true">${[...DOODLES[id], ...TWINKLES].map(doodle).join('')}</div>` : '';
 
 withInvite(data => {
   $('events').innerHTML = eventsFor(data).map(ev => {
@@ -70,9 +68,9 @@ withInvite(data => {
         ${paras.map(p => `<p>${esc(p)}</p>`).join('')}
         ${factRows ? `<dl class="facts">${factRows}</dl>` : ''}
       </div>`;
-    const party = id === 'night_before';
-    return `<section class="event-section${party ? ' party' : ''}" id="${id}">
-      ${party ? partyHead() : ''}
+    const framed = !!DOODLES[id];
+    return `<section class="event-section${framed ? ' framed' : ''}" id="${id}">
+      ${eventHead(id)}
       <h2>${esc(title)}</h2>
       ${withMap ? `<div class="event-body">${text}${mapEmbed(loc)}</div>` : text}
       ${rows.length ? `<div class="event-timeline"><h3 class="timeline-title">${t('orderOfEvents')}</h3>${timelineHtml(rows, data, {
