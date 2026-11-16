@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<script>
+// Language and lock state are set before the page draws, so nothing flashes.
+try {
+  if (localStorage.getItem('weddingLang') === 'es') document.documentElement.lang = 'es';
+  var v = JSON.parse(localStorage.getItem('weddingVerified') || 'null');
+  var c = (new URLSearchParams(location.search).get('code') || '').trim().toUpperCase();
+  if (!v || (c && c !== v.code)) document.documentElement.classList.add('locked');
+} catch (e) { document.documentElement.classList.add('locked'); }
+</script>
+<title>Details · Cameron &amp; Annie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Italianno&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=20261116f">
+</head>
+<body>
+<main>
+  <header>
+    <div class="castle"><canvas class="fireworks" aria-hidden="true"></canvas><img src="img/castle.png" alt="" width="1422" height="994"></div>
+    <p class="formal"><span data-lang="en">We invite you to celebrate <span class="nowrap">the marriage of</span></span><span data-lang="es">Os invitamos a celebrar <span class="nowrap">el enlace de</span></span></p>
+    <h1 class="names"><a href="index.html"><span class="first">Cameron</span><span class="last">Allan</span><span class="and"><span data-lang="en">and</span><span data-lang="es">y</span></span><span class="first">Annie</span><span class="last">MacConnachie</span></a></h1>
+    <div class="eyebrow"><span data-lang="en">Saturday 12th June 2027</span><span data-lang="es">Sábado, 12 de junio de 2027</span> · Rowallan Castle</div>
+    <nav class="site-nav"><a href="index.html"><span data-lang="en">Home</span><span data-lang="es">Inicio</span></a><a href="details.html" aria-current="page"><span data-lang="en">Details</span><span data-lang="es">Detalles</span></a><a href="rsvp.html"><span data-lang="en">RSVP</span><span data-lang="es">Confirmar</span></a><a href="travel.html"><span data-lang="en">Travel &amp; Stay</span><span data-lang="es">Viaje</span></a><a href="faqs.html"><span data-lang="en">FAQs</span><span data-lang="es">Preguntas</span></a></nav>
+    <div class="lang-switch"><a href="#" data-set-lang="es" data-lang="en" lang="es">Español</a><a href="#" data-set-lang="en" data-lang="es" lang="en">English</a></div>
+  </header>
+
+  <!-- One section per event this household is invited to (filled in by details.js) -->
+  <div id="events"><div class="loading" role="status"><span class="spinner" aria-hidden="true"><i></i><i></i><i></i></span><span class="loading-text"><span data-lang="en">Loading the details…</span><span data-lang="es">Cargando los detalles…</span></span></div></div>
+</main>
+<script src="common.js?v=20261116f"></script>
+<script src="events.js?v=20261116f"></script>
+<script src="details.js?v=20261116f"></script>
+
+</body>
+</html>

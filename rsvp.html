@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<script>
+// Language and lock state are set before the page draws, so nothing flashes.
+try {
+  if (localStorage.getItem('weddingLang') === 'es') document.documentElement.lang = 'es';
+  var v = JSON.parse(localStorage.getItem('weddingVerified') || 'null');
+  var c = (new URLSearchParams(location.search).get('code') || '').trim().toUpperCase();
+  if (!v || (c && c !== v.code)) document.documentElement.classList.add('locked');
+} catch (e) { document.documentElement.classList.add('locked'); }
+</script>
+<title>RSVP · Cameron &amp; Annie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Italianno&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=20261116f">
+</head>
+<body>
+<main>
+  <header>
+    <div class="castle"><canvas class="fireworks" aria-hidden="true"></canvas><img src="img/castle.png" alt="" width="1422" height="994"></div>
+    <p class="formal"><span data-lang="en">We invite you to celebrate <span class="nowrap">the marriage of</span></span><span data-lang="es">Os invitamos a celebrar <span class="nowrap">el enlace de</span></span></p>
+    <h1 class="names"><a href="index.html"><span class="first">Cameron</span><span class="last">Allan</span><span class="and"><span data-lang="en">and</span><span data-lang="es">y</span></span><span class="first">Annie</span><span class="last">MacConnachie</span></a></h1>
+    <div class="eyebrow"><span data-lang="en">Saturday 12th June 2027</span><span data-lang="es">Sábado, 12 de junio de 2027</span> · Rowallan Castle</div>
+    <nav class="site-nav"><a href="index.html"><span data-lang="en">Home</span><span data-lang="es">Inicio</span></a><a href="details.html"><span data-lang="en">Details</span><span data-lang="es">Detalles</span></a><a href="rsvp.html" aria-current="page"><span data-lang="en">RSVP</span><span data-lang="es">Confirmar</span></a><a href="travel.html"><span data-lang="en">Travel &amp; Stay</span><span data-lang="es">Viaje</span></a><a href="faqs.html"><span data-lang="en">FAQs</span><span data-lang="es">Preguntas</span></a></nav>
+    <div class="lang-switch"><a href="#" data-set-lang="es" data-lang="en" lang="es">Español</a><a href="#" data-set-lang="en" data-lang="es" lang="en">English</a></div>
+  </header>
+
+  <section id="rsvp">
+    <h2><span data-lang="en">RSVP</span><span data-lang="es">Confirmar asistencia</span></h2>
+    <p class="lead hidden" id="greeting"></p>
+    <p class="muted" id="reply-by"><span data-lang="en">Please reply by 1st February 2027.</span><span data-lang="es">Por favor, responded antes del 1 de febrero de 2027.</span></p>
+
+    <!-- Step 1: enter code -->
+    <form id="code-form" class="card">
+      <label for="code-input"><span data-lang="en">Your invite code (it’s on your invitation)</span><span data-lang="es">Tu código de invitación (aparece en la invitación)</span></label>
+      <div class="row">
+        <input id="code-input" type="text" autocomplete="off" autocapitalize="characters" placeholder="e.g. K7QX9P" required>
+        <button type="submit" style="flex:0 0 auto"><span data-lang="en">Find invite</span><span data-lang="es">Buscar</span></button>
+      </div>
+      <div id="code-error" class="error hidden"></div>
+    </form>
+
+    <div id="loading" class="loading hidden" role="status">
+      <span class="spinner" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span id="loading-text"></span>
+    </div>
+
+    <!-- Step 2: RSVP form -->
+    <form id="rsvp-form" class="hidden" novalidate>
+
+      <section class="rsvp-step" id="step-who">
+        <h3 class="step-title" id="title-who"></h3>
+        <div class="card" id="who"></div>
+      </section>
+
+      <section class="rsvp-step" id="step-meals">
+        <h3 class="step-title" id="title-meals"></h3>
+        <div id="meals"></div>
+      </section>
+
+      <!-- Only for households invited to the night-before party / offered a room -->
+      <section class="rsvp-step hidden" id="night-before"></section>
+      <section class="rsvp-step hidden" id="room"></section>
+
+      <section class="rsvp-step" id="step-message">
+        <h3 class="step-title"><span data-lang="en">Anything else?</span><span data-lang="es">¿Algo más?</span></h3>
+        <label for="message" class="muted" style="margin-top:0"><span data-lang="en">Anything we should know (optional)</span><span data-lang="es">Cualquier cosa que debamos saber (opcional)</span></label>
+        <textarea id="message" maxlength="2000"></textarea>
+      </section>
+
+      <div id="form-notice" class="notice hidden" role="alert"></div>
+      <div id="submit-error" class="error hidden"></div>
+      <p><button type="submit" id="submit-btn"></button></p>
+    </form>
+
+    <!-- Step 3: done -->
+    <div id="done" class="card hidden">
+      <h3 id="done-title"></h3>
+      <div id="summary"></div>
+      <p class="muted"><span data-lang="en">You can change your answers any time before the deadline using the same link.</span><span data-lang="es">Podéis cambiar vuestras respuestas cuando queráis antes de la fecha límite con el mismo enlace.</span></p>
+      <button type="button" class="secondary" id="edit-btn"><span data-lang="en">Change my answers</span><span data-lang="es">Cambiar mis respuestas</span></button>
+    </div>
+  </section>
+</main>
+<script src="common.js?v=20261116f"></script>
+<script src="rsvp.js?v=20261116f"></script>
+<script>
+// Button/loading text set from JS so they follow the language switch.
+function setStaticRsvpText() { if (!$('submit-btn').disabled) $('submit-btn').textContent = t('send'); $('loading-text').textContent = t('loading1'); }
+setStaticRsvpText();
+document.addEventListener('langchange', setStaticRsvpText);
+</script>
+</body>
+</html>

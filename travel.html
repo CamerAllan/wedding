@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<script>
+// Language and lock state are set before the page draws, so nothing flashes.
+try {
+  if (localStorage.getItem('weddingLang') === 'es') document.documentElement.lang = 'es';
+  var v = JSON.parse(localStorage.getItem('weddingVerified') || 'null');
+  var c = (new URLSearchParams(location.search).get('code') || '').trim().toUpperCase();
+  if (!v || (c && c !== v.code)) document.documentElement.classList.add('locked');
+} catch (e) { document.documentElement.classList.add('locked'); }
+</script>
+<title>Travel & Stay · Cameron &amp; Annie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Italianno&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=20261116f">
+</head>
+<body>
+<main>
+  <header>
+    <div class="castle"><canvas class="fireworks" aria-hidden="true"></canvas><img src="img/castle.png" alt="" width="1422" height="994"></div>
+    <p class="formal"><span data-lang="en">We invite you to celebrate <span class="nowrap">the marriage of</span></span><span data-lang="es">Os invitamos a celebrar <span class="nowrap">el enlace de</span></span></p>
+    <h1 class="names"><a href="index.html"><span class="first">Cameron</span><span class="last">Allan</span><span class="and"><span data-lang="en">and</span><span data-lang="es">y</span></span><span class="first">Annie</span><span class="last">MacConnachie</span></a></h1>
+    <div class="eyebrow"><span data-lang="en">Saturday 12th June 2027</span><span data-lang="es">Sábado, 12 de junio de 2027</span> · Rowallan Castle</div>
+    <nav class="site-nav"><a href="index.html"><span data-lang="en">Home</span><span data-lang="es">Inicio</span></a><a href="details.html"><span data-lang="en">Details</span><span data-lang="es">Detalles</span></a><a href="rsvp.html"><span data-lang="en">RSVP</span><span data-lang="es">Confirmar</span></a><a href="travel.html" aria-current="page"><span data-lang="en">Travel &amp; Stay</span><span data-lang="es">Viaje</span></a><a href="faqs.html"><span data-lang="en">FAQs</span><span data-lang="es">Preguntas</span></a></nav>
+    <div class="lang-switch"><a href="#" data-set-lang="es" data-lang="en" lang="es">Español</a><a href="#" data-set-lang="en" data-lang="es" lang="en">English</a></div>
+  </header>
+
+  <section id="getting-there">
+    <h2><span data-lang="en">Getting there</span><span data-lang="es">Cómo llegar</span></h2>
+    <div class="event-body venue-body">
+      <div class="event-text">
+      <p><span data-lang="en">Rowallan Castle is approximately a 30-minute drive from Glasgow city centre.</span><span data-lang="es">Rowallan Castle está a unos 30 minutos en coche del centro de Glasgow.</span></p>
+      <p id="parking"><span data-lang="en">Please park at the Glasshouse restaurant, a 2-minute walk from the castle entrance.</span><span data-lang="es">Por favor, aparcad en el restaurante Glasshouse, a 2 minutos a pie de la entrada del castillo.</span></p>
+      <p><span data-lang="en">If you would like to book a taxi, we recommend that you book in advance, especially for the journey home. Please note that Uber does not operate in East Ayrshire.</span><span data-lang="es">Si queréis reservar un taxi, os recomendamos hacerlo con antelación, sobre todo para la vuelta. Tened en cuenta que Uber no funciona en East Ayrshire.</span></p>
+      </div>
+      <div class="venue-map"><div class="map-frame"><iframe title="Rowallan Castle" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Rowallan+Castle,+Kilmaurs,+KA3+2LP&amp;z=12&amp;output=embed"></iframe></div>
+        <p class="venue-address">Rowallan Castle, Kilmaurs, Ayrshire, <span data-lang="en">Scotland</span><span data-lang="es">Escocia</span> KA3 2LP</p></div>
+    </div>
+    <div class="taxis">
+      <p class="taxis-intro"><span data-lang="en">Here are some local taxi companies:</span><span data-lang="es">Aquí tenéis algunas empresas de taxis de la zona:</span></p>
+      <div class="card stay"><h3>Caledonian Cabs</h3><p class="stay-address"><span data-lang="en">Based in Glasgow</span><span data-lang="es">Con base en Glasgow</span></p><p class="stay-links"><a href="tel:+447467133388">07467 133388</a> · <a href="https://www.caledoniancabs.co.uk/" target="_blank" rel="noopener"><span data-lang="en">Website</span><span data-lang="es">Web</span></a></p></div>
+      <div class="card stay"><h3>Thistle Cabs Group</h3><p class="stay-address">Kilmarnock</p><p class="stay-links"><a href="tel:+441563522222">01563 522222</a> · <a href="https://www.thistle-cabs.co.uk/" target="_blank" rel="noopener"><span data-lang="en">Website</span><span data-lang="es">Web</span></a></p></div>
+      <div class="card stay"><h3>Budget Airport Taxis</h3><p class="stay-address"><span data-lang="en">Based in Kilwinning</span><span data-lang="es">Con base en Kilwinning</span></p><p class="stay-links"><a href="tel:+447877411931">07877 411931</a> · <a href="mailto:budgetairporttaxis@outlook.com">budgetairporttaxis@outlook.com</a> · <a href="https://www.budgetairporttaxis.co.uk/" target="_blank" rel="noopener"><span data-lang="en">Website</span><span data-lang="es">Web</span></a></p></div>
+    </div>
+  </section>
+
+  <section id="accessibility">
+    <h2><span data-lang="en">Accessibility</span><span data-lang="es">Accesibilidad</span></h2>
+    <p><span data-lang="en">There is a lift in the castle. Guests can also be dropped off in front of the castle door.</span><span data-lang="es">El castillo tiene ascensor. También podéis bajaros del coche justo delante de la puerta del castillo.</span></p>
+  </section>
+
+  <!-- Only filled in when this household has been offered a room -->
+  <section id="your-room" class="hidden"></section>
+
+  <section id="stay">
+    <h2><span data-lang="en">Places to stay</span><span data-lang="es">Dónde alojarse</span></h2>
+    <p><span data-lang="en">There are plenty of accommodation options in Kilmarnock and Glasgow. Please see some suggestions below.</span><span data-lang="es">Hay muchas opciones de alojamiento en Kilmarnock y Glasgow. Aquí tenéis algunas sugerencias.</span></p>
+    <h3 class="stay-group"><span data-lang="en">Close to the castle</span><span data-lang="es">Cerca del castillo</span></h3>
+      <div class="card stay"><h3>The Fenwick Hotel</h3><p class="stay-address">Junction 8, M77, Fenwick, Kilmarnock KA3 6AU</p><p class="stay-links"><a href="tel:+441560600478">01560 600 478</a> · <a href="https://www.thefenwickhotel.co.uk/" target="_blank" rel="noopener"><span data-lang="en">Website</span><span data-lang="es">Web</span></a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=The+Fenwick+Hotel%2C+Junction+8%2C+M77%2C+Fenwick%2C+Kilmarnock+KA3+6AU" target="_blank" rel="noopener"><span data-lang="en">Map</span><span data-lang="es">Mapa</span></a></p></div>
+      <div class="card stay"><h3>Langside Bed and Breakfast</h3><p class="stay-address">Main Road, Fenwick, Ayrshire KA3 6AL</p><p class="stay-links"><a href="tel:+441560600753">01560 600 753</a> · <a href="https://langside-bedandbreakfast.com/" target="_blank" rel="noopener"><span data-lang="en">Website</span><span data-lang="es">Web</span></a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=Langside+Bed+and+Breakfast%2C+Main+Road%2C+Fenwick%2C+Ayrshire+KA3+6AL" target="_blank" rel="noopener"><span data-lang="en">Map</span><span data-lang="es">Mapa</span></a></p></div>
+    <h3 class="stay-group"><span data-lang="en">Kilmarnock</span><span data-lang="es">Kilmarnock</span></h3>
+      <div class="card stay"><h3>The Park Hotel</h3><p class="stay-address">Rugby Park, Kilmarnock KA1 1UR</p><p class="stay-links"><a href="tel:+441563545999">01563 545 999</a> · <a href="https://www.theparkhotelayrshire.co.uk/" target="_blank" rel="noopener"><span data-lang="en">Website</span><span data-lang="es">Web</span></a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=The+Park+Hotel%2C+Rugby+Park%2C+Kilmarnock+KA1+1UR" target="_blank" rel="noopener"><span data-lang="en">Map</span><span data-lang="es">Mapa</span></a></p></div>
+      <div class="card stay"><h3>Premier Inn Kilmarnock</h3><p class="stay-address">Moorfield Roundabout, Annandale, Kilmarnock KA1 2RS</p><p class="stay-links"><a href="tel:+443330031747">0333 003 1747</a> · <a href="https://www.premierinn.com/gb/en/hotels/scotland/strathclyde/kilmarnock/kilmarnock.html" target="_blank" rel="noopener"><span data-lang="en">Website</span><span data-lang="es">Web</span></a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=Premier+Inn+Kilmarnock%2C+Moorfield+Roundabout%2C+Annandale%2C+Kilmarnock+KA1+2RS" target="_blank" rel="noopener"><span data-lang="en">Map</span><span data-lang="es">Mapa</span></a></p></div>
+    <h3 class="stay-group"><span data-lang="en">Glasgow</span><span data-lang="es">Glasgow</span></h3>
+      <div class="card stay"><h3>Premier Inn Glasgow (Newton Mearns)</h3><p class="stay-address">Greenlaw, Crookfur Road, Newton Mearns, Glasgow G77 6EF</p><p class="stay-links"><a href="tel:+443333219236">0333 321 9236</a> · <a href="https://www.premierinn.com/gb/en/hotels/scotland/strathclyde/glasgow/glasgow-newton-mearns-m77-j4.html" target="_blank" rel="noopener"><span data-lang="en">Website</span><span data-lang="es">Web</span></a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=Premier+Inn+Glasgow+%28Newton+Mearns%29%2C+Greenlaw%2C+Crookfur+Road%2C+Newton+Mearns%2C+Glasgow+G77+6EF" target="_blank" rel="noopener"><span data-lang="en">Map</span><span data-lang="es">Mapa</span></a></p></div>
+      <div class="card stay"><h3>Hilton Glasgow</h3><p class="stay-address">1 William Street, Glasgow G3 8HT</p><p class="stay-links"><a href="tel:+441412045555">0141 204 5555</a> · <a href="https://www.hilton.com/en/hotels/glahitw-hilton-glasgow/" target="_blank" rel="noopener"><span data-lang="en">Website</span><span data-lang="es">Web</span></a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=Hilton+Glasgow%2C+1+William+Street%2C+Glasgow+G3+8HT" target="_blank" rel="noopener"><span data-lang="en">Map</span><span data-lang="es">Mapa</span></a></p></div>
+      <div class="card stay"><h3>Glasgow Marriott</h3><p class="stay-address">500 Argyle Street, Glasgow G3 8RR</p><p class="stay-links"><a href="tel:+441412265577">0141 226 5577</a> · <a href="https://www.marriott.co.uk/hotels/travel/gladt-glasgow-marriott-hotel/" target="_blank" rel="noopener"><span data-lang="en">Website</span><span data-lang="es">Web</span></a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=Glasgow+Marriott%2C+500+Argyle+Street%2C+Glasgow+G3+8RR" target="_blank" rel="noopener"><span data-lang="en">Map</span><span data-lang="es">Mapa</span></a></p></div>
+  </section>
+</main>
+<script src="common.js?v=20261116f"></script>
+<script>
+// If this household has been offered a room, show it here too.
+let roomData = null;
+function renderRoom() {
+  if (!roomData) return;
+  const r = roomData.invite.room;
+  const answer = roomData.existing?.[0]?.room_accepted;
+  $('your-room').innerHTML = `
+    <h2>${t('yourRoom')}</h2>
+    <div class="card room">
+      ${roomCardHtml(r)}
+      <p class="room-answer">${answer === 'yes' ? esc(t('accepted')) + ' ' : answer === 'no' ? esc(t('declined')) + ' ' : ''}<a href="rsvp.html?code=${encodeURIComponent(roomData.invite.code)}">${answer ? t('changeAnswer') : t('letUsKnowRoom')}</a></p>
+    </div>`;
+  show($('your-room'), true);
+}
+document.addEventListener('langchange', renderRoom);
+whenUnlocked(async () => {
+  try {
+    const data = await getInvite(getCode());
+    if (data.ok && data.invite.room) { roomData = data; renderRoom(); }
+  } catch (e) {}
+});
+</script>
+</body>
+</html>
