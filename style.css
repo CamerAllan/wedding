@@ -558,7 +558,6 @@ summary::marker { color:var(--duck); }
 .party h2 { margin-top:0; }
 @media (max-width: 600px) {
   .event-section.party { padding:132px 20px 24px; }
-  .party .doodle.side { display:none; }
   .party .disco { width:66px !important; top:-20px !important; }
   .party .cheers { left:16% !important; width:80px !important; top:44px !important; }
   .party .notes { left:85% !important; width:40px !important; }

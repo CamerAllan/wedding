@@ -46,12 +46,7 @@ function partyHead() {
     doodle('twinkle-2', 'twinkle t2', 64, 84, 13),
     doodle('twinkle-1', 'twinkle t3', 69, 26, 11)
   ];
-  const sides = [                                                      // in the margins, clear of the text
-    doodle('heart-1', 'side', 5, 232, 30),
-    doodle('sparkler', 'side', 95, 236, 42),
-    doodle('popper', 'side', 4.6, 470, 34), doodle('note', 'side', 95, 540, 24)
-  ];
-  return `<div class="doodles" aria-hidden="true">${top.join('')}${sides.join('')}</div>`;
+  return `<div class="doodles" aria-hidden="true">${top.join('')}</div>`;
 }
 
 withInvite(data => {
