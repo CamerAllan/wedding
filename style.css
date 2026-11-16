@@ -556,7 +556,8 @@ summary::marker { color:var(--duck); }
 .party .doodle { position:absolute; display:block; transform:translateX(-50%); }
 .party .doodle svg { display:block; width:100%; height:auto; overflow:visible; fill:none; stroke:var(--wine);
   stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
-.party .doodle.side svg { stroke-width:1.7; }
+.party .doodle.side svg { stroke-width:1.8; }
+.party .doodle .pass { stroke-width:.8; opacity:.55; }
 .party .doodle.tilt svg { transform:rotate(14deg); }
 .party .disco svg { transform-origin:50% 0; animation:sway 5s ease-in-out infinite; }
 @keyframes sway { 0%,100% { transform:rotate(-3deg) } 50% { transform:rotate(3deg) } }

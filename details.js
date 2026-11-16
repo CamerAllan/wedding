@@ -39,7 +39,7 @@ const mapEmbed = q => `<div class="event-map"><div class="map-frame"><iframe tit
 let seedR = 11;
 const rnd = () => (seedR = (seedR * 9301 + 49297) % 233280) / 233280;
 const jit = (v, j) => v + (rnd() - .5) * 2 * j;
-function wob(pts, j = .5, closed = false) {            // smooth Catmull-Rom path through jittered points
+function wobPath(pts, j, closed) {                     // smooth Catmull-Rom path through jittered points
   const q = pts.map(([x, y]) => [jit(x, j), jit(y, j)]);
   const n = q.length, P = i => q[closed ? (i + n) % n : Math.max(0, Math.min(n - 1, i))];
   let d = `M${q[0][0].toFixed(1)} ${q[0][1].toFixed(1)}`;
@@ -49,7 +49,13 @@ function wob(pts, j = .5, closed = false) {            // smooth Catmull-Rom pat
     const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
     d += `C${c1.map(v => v.toFixed(1))} ${c2.map(v => v.toFixed(1))} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
   }
-  return `<path d="${d}"/>`;
+  return d;
+}
+// A pen line: a wobbly main stroke plus a fainter second pass that doesn't quite follow it,
+// so each line looks drawn rather than generated.
+function wob(pts, j = .5, closed = false) {
+  const k = 1.9;
+  return `<path d="${wobPath(pts, j * k, closed)}"/><path class="pass" d="${wobPath(pts, j * k * 1.2, closed)}"/>`;
 }
 const arc = (cx, cy, rx, ry, a0, a1, n = 14) =>
   Array.from({ length: n + 1 }, (_, i) => { const a = a0 + (a1 - a0) * i / n; return [cx + rx * Math.cos(a), cy + ry * Math.sin(a)]; });
