@@ -144,6 +144,7 @@ function syncPeople() {
 
 // ---------- Whole form ----------
 function renderForm() {
+  show($('reply-by'), true);   // only once the invite has loaded and they haven't replied yet
   const { invite, existing } = state;
   const byName = Object.fromEntries(existing.filter(e => e.is_plus_one !== 'yes').map(e => [e.guest_name, e]));
   const plusExisting = existing.filter(e => e.is_plus_one === 'yes');

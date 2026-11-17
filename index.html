@@ -17,7 +17,7 @@ try {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Italianno&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261117c">
+<link rel="stylesheet" href="style.css?v=20261117d">
 </head>
 <body>
 <main>
@@ -43,11 +43,15 @@ try {
     <p class="panel-more"><a href="details.html"><span data-lang="en">Times, places &amp; everything else →</span><span data-lang="es">Horarios, lugares y todo lo demás →</span></a></p>
   </section>
 </main>
-<script src="common.js?v=20261117c"></script>
+<script src="common.js?v=20261117d"></script>
 <script>
 // Once a household has replied, the RSVP box thanks them instead of asking (and drops the deadline).
-function markReplied(d) { document.querySelector('.panel-wine').classList.toggle('replied', !!(d && d.ok && d.existing && d.existing.length)); }
-whenUnlocked(() => getInvite(getCode()).then(markReplied).catch(() => {}));
+function markReplied(d) {
+  const panel = document.querySelector('.panel-wine');
+  panel.classList.toggle('replied', !!(d && d.ok && d.existing && d.existing.length));
+  panel.classList.add('known');   // the deadline only appears once we know whether they've replied
+}
+whenUnlocked(() => getInvite(getCode()).then(markReplied).catch(() => markReplied(null)));
 document.addEventListener('invitefresh', e => markReplied(e.detail));
 </script>
 
