@@ -17,7 +17,9 @@
     im.alt = ''; im.width = 772; im.height = 1038; im.decoding = 'async';
     if (k > 3) im.loading = 'lazy';
     im.src = src;
-    track.appendChild(im);
+    var frame = document.createElement('span');   // the frame stays blue while the photo is black and white
+    frame.appendChild(im);
+    track.appendChild(frame);
   });
   strip.appendChild(track);
   source.parentNode.insertBefore(strip, source);
