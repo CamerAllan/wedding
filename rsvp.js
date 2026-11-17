@@ -7,6 +7,8 @@ function optionLabel(course, value) {
 
 // Chosen automatically when a guest's dietary requirements rule out every dish in a course.
 const TBC_DISH = 'Alternative (dietary requirements)';
+// Requirements that are about drinks, so they're recorded but never change the food options.
+const DRINKS_ONLY = ['Alcohol-free'];
 
 // ---- RSVP form ----
 // Steps: 1 Who's coming → 2 Meal choices (one card per attending person) → Night-before (if invited)
@@ -97,7 +99,8 @@ function tickedDiets(el) {
 function refreshOptions(el) {
   const ticked = tickedDiets(el);
   show(el.querySelector('.other-wrap'), ticked.includes(OTHER));
-  const diets = ticked.filter(d => d !== OTHER); // "Other" is free text, so it doesn't filter dishes
+  // "Other" is free text, and alcohol-free is about drinks, so neither filters the dishes.
+  const diets = ticked.filter(d => d !== OTHER && !DRINKS_ONLY.includes(d));
   const idx = el.dataset.idx;
   el.querySelectorAll('.course').forEach(fs => {
     const course = state.menu.courses[fs.dataset.ci];
