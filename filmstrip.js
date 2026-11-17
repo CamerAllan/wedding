@@ -25,7 +25,7 @@
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var wide = window.matchMedia('(min-width: 900px)');
   if (still) return;
-  var y = 0, last = 0, paused = false, SPEED = 16;   // pixels per second
+  var y = 0, last = 0, paused = false, SPEED = 32;   // pixels per second
   strip.addEventListener('mouseenter', function () { paused = true; });
   strip.addEventListener('mouseleave', function () { paused = false; });
   function tick(now) {
