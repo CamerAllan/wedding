@@ -1,8 +1,12 @@
 /** The dish name in the current language (answers are stored by the English name). */
 function optionLabel(course, value) {
+  if (value === TBC_DISH) return t('tbcDish');
   const o = (course.options || []).find(o => o.option === value);
   return o ? (L(o, 'option') || value) : value;
 }
+
+// Chosen automatically when a guest's dietary requirements rule out every dish in a course.
+const TBC_DISH = 'To be confirmed (dietary requirements)';
 
 // ---- RSVP form ----
 // Steps: 1 Who's coming → 2 Meal choices (one card per attending person) → Night-before (if invited)
@@ -27,6 +31,10 @@ function isActive(idx) { return !isPlusIdx(idx) || !!document.querySelector(`.po
 function isAttending(idx) {
   if (isPlusIdx(idx)) return isActive(idx);
   return document.querySelector(`input[name="att${idx}"]:checked`)?.value === 'yes';
+}
+/** True when every named guest has said no (and no plus-one is coming), i.e. the whole household is declining. */
+function allDeclined() {
+  return people().every(p => p.plus ? !isActive(p.idx) : document.querySelector(`input[name="att${p.idx}"]:checked`)?.value === 'no');
 }
 function personName(idx) {
   if (!isPlusIdx(idx)) return state.invite.guests[idx];
@@ -66,7 +74,6 @@ function mealCardHtml(idx, existing) {
     <fieldset class="course" data-ci="${ci}" data-course="${esc(c.name)}" data-initial="${esc(existing?.[c.name])}">
       <legend>${esc(term(c.name))}</legend>
       <div class="dishes"></div>
-      <p class="muted none-fit hidden">${esc(t('noneFit', { course: term(c.name).toLowerCase() }))}</p>
     </fieldset>`).join('');
   return `
   <div class="card person hidden" data-idx="${idx}">
@@ -76,6 +83,7 @@ function mealCardHtml(idx, existing) {
     <div class="other-wrap ${ticked.includes(OTHER)?'':'hidden'}">
       <label for="p${idx}-diet">${t('tellUs')}</label>
       <input type="text" id="p${idx}-diet" class="pdiet" maxlength="500" value="${esc(existing?.dietary_notes)}">
+      <p class="muted diet-note">${t('kitchenNote')}</p>
     </div>
     ${courses}
   </div>`;
@@ -97,6 +105,14 @@ function refreshOptions(el) {
     fs.dataset.initial = '';
     const fits = course.options.filter(o => diets.every(d => o.diets && d in o.diets));
     const name = `p${idx}-c${fs.dataset.ci}`;
+    // If nothing suits their requirements, there's a single answer, already selected: we'll confirm nearer the time.
+    if (!fits.length) {
+      fs.querySelector('.dishes').innerHTML = `<label class="dish">
+        <input type="radio" name="${name}" value="${esc(TBC_DISH)}" checked>
+        <span><strong>${esc(t('tbcDish'))}</strong><span class="desc">${esc(t('tbcDesc'))}</span></span>
+      </label>`;
+      return;
+    }
     fs.querySelector('.dishes').innerHTML = fits.map(o => {
       // e.g. "✓ Vegetarian · ✓ Gluten-free (on request)" for the diets this guest ticked
       const tags = diets.map(d => '✓ ' + esc(term(d)) + (o.diets[d] ? ' (' + esc(term(o.diets[d])) + ')' : '')).join(' · ');
@@ -107,7 +123,6 @@ function refreshOptions(el) {
           ${tags ? `<span class="tags">${tags}</span>` : ''}</span>
       </label>`;
     }).join('');
-    show(fs.querySelector('.none-fit'), fits.length === 0);
   });
 }
 
@@ -123,6 +138,7 @@ function syncPeople() {
     card.querySelector('.meal-name').textContent = personName(p.idx);
   });
   show($('step-meals'), anyone);
+  show($('room'), !!state.invite.room && !allDeclined());   // no room offer for a household that isn't coming
   syncNightBefore();
 }
 
@@ -240,7 +256,7 @@ function validate() {
     if (row.classList.contains('hidden') || row.querySelector('input:checked')) return;
     add(row, t('nbQuestion', { who: row.querySelector('.nb-name').textContent, title: L(state.invite.nightBefore, 'title') || t('nightBefore') }));
   });
-  if (state.invite.room && !document.querySelector('input[name=room]:checked')) add($('room').querySelector('.card'), t('roomQuestion', { room: L(state.invite.room, 'name') }));
+  if (state.invite.room && !allDeclined() && !document.querySelector('input[name=room]:checked')) add($('room').querySelector('.card'), t('roomQuestion', { room: L(state.invite.room, 'name') }));
 
   document.querySelectorAll('.invalid').forEach(x => x.classList.remove('invalid'));
   problems.forEach(p => p.el.classList.add('invalid'));
@@ -290,7 +306,7 @@ function collect() {
   return {
     code: state.invite.code,
     people: out,
-    room_accepted: roomVal === 'yes' ? true : roomVal === 'no' ? false : null,
+    room_accepted: !state.invite.room ? null : allDeclined() ? false : roomVal === 'yes' ? true : roomVal === 'no' ? false : null,
     message: $('message').value.trim()
   };
 }
@@ -312,7 +328,7 @@ function renderSummary(payload) {
     parts.push(`<div class="sum-person"><p class="card-label">${esc(title)}</p>${factsHtml(payload.people.map(p =>
       [p.guest_name, p.night_before === true ? t('willBeThere') : p.night_before === false ? t('cantMake') : '–']), 'compact people')}</div>`);
   }
-  if (state.invite.room) {
+  if (state.invite.room && payload.people.some(p => p.attending)) {
     parts.push(`<div class="sum-person"><p class="card-label">${t('yourRoom')}</p>${factsHtml([[L(state.invite.room, 'name'),
       payload.room_accepted === true ? t('yesPlease') : payload.room_accepted === false ? t('noThanks') : '–']], 'compact people')}</div>`);
   }
