@@ -1,12 +1,12 @@
 /** The dish name in the current language (answers are stored by the English name). */
 function optionLabel(course, value) {
-  if (value === TBC_DISH) return t('tbcDish');
+  if (value === TBC_DISH || value === 'To be confirmed (dietary requirements)') return t('tbcDish');
   const o = (course.options || []).find(o => o.option === value);
   return o ? (L(o, 'option') || value) : value;
 }
 
 // Chosen automatically when a guest's dietary requirements rule out every dish in a course.
-const TBC_DISH = 'To be confirmed (dietary requirements)';
+const TBC_DISH = 'Alternative (dietary requirements)';
 
 // ---- RSVP form ----
 // Steps: 1 Who's coming → 2 Meal choices (one card per attending person) → Night-before (if invited)
