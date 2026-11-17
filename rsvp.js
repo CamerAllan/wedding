@@ -105,14 +105,12 @@ function refreshOptions(el) {
     fs.dataset.initial = '';
     const fits = course.options.filter(o => diets.every(d => o.diets && d in o.diets));
     const name = `p${idx}-c${fs.dataset.ci}`;
-    // If nothing suits their requirements, there's a single answer, already selected: we'll confirm nearer the time.
-    if (!fits.length) {
-      fs.querySelector('.dishes').innerHTML = `<label class="dish">
-        <input type="radio" name="${name}" value="${esc(TBC_DISH)}" checked>
+    const alt = checked => `<label class="dish">
+        <input type="radio" name="${name}" value="${esc(TBC_DISH)}" ${checked ? 'checked' : ''}>
         <span><strong>${esc(t('tbcDish'))}</strong><span class="desc">${esc(t('tbcDesc'))}</span></span>
       </label>`;
-      return;
-    }
+    // If nothing suits their requirements, there's a single answer, already selected.
+    if (!fits.length) { fs.querySelector('.dishes').innerHTML = alt(true); return; }
     fs.querySelector('.dishes').innerHTML = fits.map(o => {
       // e.g. "✓ Vegetarian · ✓ Gluten-free (on request)" for the diets this guest ticked
       const tags = diets.map(d => '✓ ' + esc(term(d)) + (o.diets[d] ? ' (' + esc(term(o.diets[d])) + ')' : '')).join(' · ');
@@ -122,7 +120,9 @@ function refreshOptions(el) {
           ${L(o, 'description') ? `<span class="desc">${esc(L(o, 'description'))}</span>` : ''}
           ${tags ? `<span class="tags">${tags}</span>` : ''}</span>
       </label>`;
-    }).join('');
+    }).join('')
+      // "Other" requirements can't filter the menu, so offer the alternative as a choice too.
+      + (ticked.includes(OTHER) ? alt(current === TBC_DISH) : '');
   });
 }
 
