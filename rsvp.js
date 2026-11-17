@@ -253,11 +253,11 @@ function validate() {
       if (fs.querySelector('.dish') && !fs.querySelector('input:checked')) add(fs, t('chooseCourse', { who, course: term(fs.dataset.course).toLowerCase() }));
     });
   });
+  if (state.invite.room && !allDeclined() && !document.querySelector('input[name=room]:checked')) add($('room').querySelector('.card'), t('roomQuestion', { room: L(state.invite.room, 'name') }));
   document.querySelectorAll('.nb-row').forEach(row => {
     if (row.classList.contains('hidden') || row.querySelector('input:checked')) return;
     add(row, t('nbQuestion', { who: row.querySelector('.nb-name').textContent, title: L(state.invite.nightBefore, 'title') || t('nightBefore') }));
   });
-  if (state.invite.room && !allDeclined() && !document.querySelector('input[name=room]:checked')) add($('room').querySelector('.card'), t('roomQuestion', { room: L(state.invite.room, 'name') }));
 
   document.querySelectorAll('.invalid').forEach(x => x.classList.remove('invalid'));
   problems.forEach(p => p.el.classList.add('invalid'));
@@ -324,14 +324,14 @@ function renderSummary(payload) {
     return `<div class="sum-person">${head}${factsHtml(rows, 'compact')}</div>`;
   });
   parts.unshift(`<p class="card-label sum-section">${t('theWedding')}</p>`);   // a heading like the night-before and room ones
+  if (state.invite.room && payload.people.some(p => p.attending)) {
+    parts.push(`<div class="sum-person"><p class="card-label">${t('yourRoom')}</p>${factsHtml([[L(state.invite.room, 'name'),
+      payload.room_accepted === true ? t('yesPlease') : payload.room_accepted === false ? t('noThanks') : '–']], 'compact people')}</div>`);
+  }
   if (state.invite.nightBefore) {
     const title = L(state.invite.nightBefore, 'title') || t('nightBefore');
     parts.push(`<div class="sum-person"><p class="card-label">${esc(title)}</p>${factsHtml(payload.people.map(p =>
       [p.guest_name, p.night_before === true ? t('willBeThere') : p.night_before === false ? t('cantMake') : '–']), 'compact people')}</div>`);
-  }
-  if (state.invite.room && payload.people.some(p => p.attending)) {
-    parts.push(`<div class="sum-person"><p class="card-label">${t('yourRoom')}</p>${factsHtml([[L(state.invite.room, 'name'),
-      payload.room_accepted === true ? t('yesPlease') : payload.room_accepted === false ? t('noThanks') : '–']], 'compact people')}</div>`);
   }
   $('summary').innerHTML = parts.join('');
 }

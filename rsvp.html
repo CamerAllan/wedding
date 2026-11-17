@@ -17,7 +17,7 @@ try {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Italianno&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261117d">
+<link rel="stylesheet" href="style.css?v=20261117e">
 </head>
 <body>
 <main>
@@ -63,9 +63,9 @@ try {
         <div id="meals"></div>
       </section>
 
-      <!-- Only for households invited to the night-before party / offered a room -->
-      <section class="rsvp-step hidden" id="night-before"></section>
+      <!-- Only for households invited to the offered a room / invited to the night-before party -->
       <section class="rsvp-step hidden" id="room"></section>
+      <section class="rsvp-step hidden" id="night-before"></section>
 
       <section class="rsvp-step" id="step-message">
         <h3 class="step-title"><span data-lang="en">Anything else?</span><span data-lang="es">¿Algo más?</span></h3>
@@ -87,8 +87,8 @@ try {
     </div>
   </section>
 </main>
-<script src="common.js?v=20261117d"></script>
-<script src="rsvp.js?v=20261117d"></script>
+<script src="common.js?v=20261117e"></script>
+<script src="rsvp.js?v=20261117e"></script>
 <script>
 // Button/loading text set from JS so they follow the language switch.
 function setStaticRsvpText() { if (!$('submit-btn').disabled) $('submit-btn').textContent = t('send'); $('loading-text').textContent = t('loading1'); }
