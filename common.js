@@ -15,7 +15,7 @@ const DEMO = {
       room:{ name:'The Loft Room', description:'Cosy room in the eaves.', description_es:'Acogedora habitación abuhardillada.', nights:'Sat 12th June', nights_es:'Sábado 12 de junio', image:'rooms/loft.svg', price:'', price_es:'', free:true },
       nightBefore:{ title:'Night-before party', title_es:'Fiesta de la noche anterior', when:'Friday 11th June 2027, from 19:30', when_es:'Viernes 11 de junio de 2027, a partir de las 19:30', where:'Placeholder pub', where_es:'Pub provisional' } }
   },
-  menu:{ diets:['Vegan','Vegetarian','Gluten-free','Alcohol-free'], courses:[
+  menu:{ diets:['Vegan','Vegetarian','Gluten-free','Alcohol-free (drinks)'], courses:[
     { name:'Starter', options:[
       {option:'Scottish Salmon Three Ways',option_es:'Salmón escocés en tres versiones',description:'Heritage Beetroot',description_es:'Remolacha tradicional',diets:{'Gluten-free':'on request'}},
       {option:'Goats Cheese Arancini',option_es:'Arancini de queso de cabra',description:'Rocket & Red Onion | Beetroot',diets:{Vegetarian:'','Gluten-free':'on request'}}] },
@@ -247,7 +247,7 @@ function L(obj, field) { return (obj && getLang() === 'es' && obj[field + '_es']
 
 // Names from the sheet's column headers (courses, dietary requirements). Unknown names are shown as written.
 const TERMS_ES = { 'Starter':'Entrante', 'Main':'Plato principal', 'Dessert':'Postre', 'Vegan':'Vegano', 'Vegetarian':'Vegetariano',
-                   'Gluten-free':'Sin gluten', 'Alcohol-free':'Sin alcohol', 'Other':'Otro', 'on request':'bajo petición' };
+                   'Gluten-free':'Sin gluten', 'Alcohol-free (drinks)':'Sin alcohol (bebidas)', 'Alcohol-free':'Sin alcohol', 'Other':'Otro', 'on request':'bajo petición' };
 function term(s) { return (getLang() === 'es' && TERMS_ES[s]) || s; }
 
 const STR = {

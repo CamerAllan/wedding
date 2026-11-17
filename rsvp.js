@@ -8,7 +8,7 @@ function optionLabel(course, value) {
 // Chosen automatically when a guest's dietary requirements rule out every dish in a course.
 const TBC_DISH = 'Alternative (dietary requirements)';
 // Requirements that are about drinks, so they're recorded but never change the food options.
-const DRINKS_ONLY = ['Alcohol-free'];
+const DRINKS_ONLY = ['Alcohol-free (drinks)', 'Alcohol-free'];
 
 // ---- RSVP form ----
 // Steps: 1 Who's coming → 2 Meal choices (one card per attending person) → Night-before (if invited)
