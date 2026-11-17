@@ -565,3 +565,20 @@ summary::marker { color:var(--duck); }
 }
 
 .diet-note { margin:6px 0 0; font-size:.9rem; }
+
+/* FAQ film strip (wider screens): photos stacked the full height of the questions, drifting upwards */
+.faq-strip { display:none; }
+@media (min-width:900px) {
+  .faq-layout { align-items:stretch; }
+  .faq-layout .faq-photos { display:none; }
+  .faq-strip { display:block; position:relative; overflow:hidden; min-height:420px; margin-top:6px;
+    -webkit-mask-image:linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent);
+            mask-image:linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent); }
+  .strip-track { position:absolute; top:0; left:0; right:0; will-change:transform; }
+  .strip-track img { display:block; width:100%; height:auto; aspect-ratio:772/1038; object-fit:cover;
+    box-sizing:border-box; margin:0 0 16px; border:4px solid var(--duck); padding:3px; background:var(--paper); }
+}
+@media (min-width:900px) and (prefers-reduced-motion: reduce) {
+  .faq-strip { overflow-y:auto; -webkit-mask-image:none; mask-image:none; }
+  .strip-track { position:static; }
+}
