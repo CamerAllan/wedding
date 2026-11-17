@@ -28,6 +28,7 @@
   var wide = window.matchMedia('(min-width: 900px)');
   if (still) return;   // reduced motion: the strip stays put and scrolls like a normal box (see style.css)
   var y = 0, last = 0, paused = false, SPEED = 32;   // pixels per second
+  var v = SPEED;   // current speed: eases towards 0 when paused and back up to SPEED, so it never stops or starts with a jolt
   function place() {
     var loop = track.scrollHeight / 2 || 1;   // height of one copy of the photos
     y = ((y % loop) + loop) % loop;           // wrap both ways, so scrolling up loops too
@@ -63,7 +64,11 @@
   function tick(now) {
     var dt = last ? Math.min((now - last) / 1000, .1) : 0;
     last = now;
-    if (wide.matches && !paused && !document.hidden) { y += SPEED * dt; place(); }
+    if (wide.matches && !document.hidden) {
+      var target = paused ? 0 : SPEED;
+      v += (target - v) * (1 - Math.exp(-dt / 0.45));   // about half a second to glide to a stop or back up to speed
+      if (dragY === null && v > 0.05) { y += v * dt; place(); }
+    }
     requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
