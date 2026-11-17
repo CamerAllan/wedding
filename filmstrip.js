@@ -26,18 +26,44 @@
 
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var wide = window.matchMedia('(min-width: 900px)');
-  if (still) return;
+  if (still) return;   // reduced motion: the strip stays put and scrolls like a normal box (see style.css)
   var y = 0, last = 0, paused = false, SPEED = 32;   // pixels per second
+  function place() {
+    var loop = track.scrollHeight / 2 || 1;   // height of one copy of the photos
+    y = ((y % loop) + loop) % loop;           // wrap both ways, so scrolling up loops too
+    track.style.transform = 'translate3d(0,' + (-y).toFixed(2) + 'px,0)';
+  }
   strip.addEventListener('mouseenter', function () { paused = true; });
   strip.addEventListener('mouseleave', function () { paused = false; });
+
+  // Scroll it by hand: mouse wheel / trackpad while hovering, or drag it.
+  strip.addEventListener('wheel', function (e) {
+    if (!wide.matches) return;
+    e.preventDefault();
+    y += e.deltaMode === 1 ? e.deltaY * 30 : e.deltaY;
+    place();
+  }, { passive: false });
+  var dragY = null;
+  strip.addEventListener('pointerdown', function (e) {
+    if (!wide.matches) return;
+    dragY = e.clientY; paused = true; strip.setPointerCapture(e.pointerId); strip.classList.add('dragging');
+  });
+  strip.addEventListener('pointermove', function (e) {
+    if (dragY === null) return;
+    y -= e.clientY - dragY; dragY = e.clientY; place();
+  });
+  function endDrag(e) {
+    if (dragY === null) return;
+    dragY = null; strip.classList.remove('dragging');
+    if (e.pointerType !== 'mouse') paused = false;   // touch has no "mouseleave" to resume it
+  }
+  strip.addEventListener('pointerup', endDrag);
+  strip.addEventListener('pointercancel', endDrag);
+
   function tick(now) {
     var dt = last ? Math.min((now - last) / 1000, .1) : 0;
     last = now;
-    if (wide.matches && !paused && !document.hidden) {
-      var loop = track.scrollHeight / 2;   // height of one copy of the photos
-      y = (y + SPEED * dt) % (loop || 1);
-      track.style.transform = 'translate3d(0,' + (-y).toFixed(2) + 'px,0)';
-    }
+    if (wide.matches && !paused && !document.hidden) { y += SPEED * dt; place(); }
     requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
