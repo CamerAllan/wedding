@@ -256,7 +256,6 @@ const STR = {
     alsoForYou: 'Also for you',
     notInvitedNb: 'The night-before party isn’t part of your invitation, but we can’t wait to see you at the wedding!', backHome: '← Back to home', timings: 'Timings', nothingMorning: 'Nothing’s planned for you the morning after. Safe travels home!',
     stYes: 'Confirmed', stNo: 'Declined', stTodo: 'RSVP needed', itinEmpty: 'Your itinerary will appear here soon.', itinLegend: '✓ you’ve said yes · ✗ you’ve said no · ● tap to RSVP',
-    roomFree: 'There’s no charge for your room. It’s on us!',
     checking: 'Checking…',
     gateNeedCode: 'Please enter your invite code.', gateNeedName: 'Please enter your surname.', gateWrongName: 'That surname doesn’t match this invitation. Please try again.',
     doneNew: 'Thank you, your RSVP is in.', doneExisting: 'Here’s your RSVP:',
@@ -281,7 +280,7 @@ const STR = {
     yourRoom: 'Your room', accepted: 'You’ve accepted this room.', declined: 'You’ve declined this room.',
     changeAnswer: 'Change your answer', letUsKnowRoom: 'Let us know if you’d like it',
     roomNight: 'Night', roomPrice: 'Price', breakfastLabel: 'Breakfast', breakfastShort: 'Included, served 09:30-10:30 on the ground floor', checkoutLabel: 'Check-out', checkoutShort: 'By 11:00',
-    roomFreeShort: 'No charge - it’s on us!', roomIntro: 'We’d love you to join us staying at the castle, so we’ve saved a room for you.',
+    roomIntro: 'We’d love you to join us staying at the castle, so we’ve saved a room for you.',
     roomQ: 'Would you like it?', nbQ: 'Can you make it?', yourAnswer: 'Your answer', dietShort: 'Dietary', theWedding: 'The wedding', orderOfEvents: 'Order of events'
   },
   es: {
@@ -289,7 +288,6 @@ const STR = {
     alsoForYou: 'También para vosotros',
     notInvitedNb: 'La fiesta de la noche anterior no forma parte de vuestra invitación, ¡pero tenemos muchas ganas de veros en la boda!', backHome: '← Volver al inicio', timings: 'Horario', nothingMorning: 'No hay nada previsto para vosotros la mañana siguiente. ¡Buen viaje de vuelta!',
     stYes: 'Confirmado', stNo: 'Rechazado', stTodo: 'Falta confirmar', itinEmpty: 'Vuestro itinerario aparecerá aquí pronto.', itinLegend: '✓ habéis dicho que sí · ✗ habéis dicho que no · ● pulsa para confirmar',
-    roomFree: 'La habitación no tiene coste para vosotros. ¡Invitamos nosotros!',
     checking: 'Comprobando…',
     gateNeedCode: 'Escribe tu código de invitación.', gateNeedName: 'Escribe tu apellido.', gateWrongName: 'Ese apellido no coincide con esta invitación. Inténtalo de nuevo.',
     doneNew: '¡Gracias! Hemos recibido vuestra respuesta.', doneExisting: 'Esta es vuestra respuesta:',
@@ -314,7 +312,7 @@ const STR = {
     yourRoom: 'Vuestra habitación', accepted: 'Habéis aceptado esta habitación.', declined: 'Habéis rechazado esta habitación.',
     changeAnswer: 'Cambiar la respuesta', letUsKnowRoom: 'Decidnos si la queréis',
     roomNight: 'Noche', roomPrice: 'Precio', breakfastLabel: 'Desayuno', breakfastShort: 'Incluido, se sirve de 09:30 a 10:30 en la planta baja', checkoutLabel: 'Salida', checkoutShort: 'Antes de las 11:00',
-    roomFreeShort: 'Sin coste: ¡invitamos nosotros!', roomIntro: 'Nos encantaría que os quedarais con nosotros en el castillo, así que os hemos reservado una habitación.',
+    roomIntro: 'Nos encantaría que os quedarais con nosotros en el castillo, así que os hemos reservado una habitación.',
     roomQ: '¿La queréis?', nbQ: '¿Podéis venir?', yourAnswer: 'Vuestra respuesta', dietShort: 'Dieta', theWedding: 'La boda', orderOfEvents: 'Programa'
   }
 };
@@ -499,7 +497,8 @@ function money(v) {
 
 /** A room: photo(s), name, description, then night / price / breakfast rows. Values are escaped here. */
 function roomCardHtml(r) {
-  const price = r.free ? t('roomFreeShort') : money(L(r, 'price'));
+  // Guests whose room is on us see no price row at all, and nothing about payment.
+  const price = r.free ? '' : money(L(r, 'price'));
   return `${roomPhotosHtml(r)}
     <h3 class="card-title">${esc(L(r, 'name'))}</h3>
     ${L(r, 'description') ? `<p class="card-lead">${esc(L(r, 'description'))}</p>` : ''}
