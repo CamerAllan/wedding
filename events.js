@@ -77,7 +77,7 @@ function to24h(value) {
   const m = s.match(/^\s*(\d{1,2})(?::(\d{2}))?\s*(?:[–-]\s*(\d{1,2})(?::(\d{2}))?)?\s*(am|pm)\s*$/i);
   if (!m) return s;
   const conv = (h, mm, ap) => { h = Number(h) % 12 + (ap.toLowerCase() === 'pm' ? 12 : 0); return String(h).padStart(2, '0') + ':' + (mm || '00'); };
-  return m[3] ? conv(m[1], m[2], m[5]) + '–' + conv(m[3], m[4], m[5]) : conv(m[1], m[2], m[5]);
+  return m[3] ? conv(m[1], m[2], m[5]) + '-' + conv(m[3], m[4], m[5]) : conv(m[1], m[2], m[5]);
 }
 const dayOf = it => tidy(L(it, 'day'), 'day');
 

@@ -329,12 +329,12 @@ function renderSummary(payload) {
   parts.unshift(`<p class="card-label sum-section">${t('theWedding')}</p>`);   // a heading like the night-before and room ones
   if (state.invite.room && payload.people.some(p => p.attending)) {
     parts.push(`<div class="sum-person"><p class="card-label">${t('yourRoom')}</p>${factsHtml([[L(state.invite.room, 'name'),
-      payload.room_accepted === true ? t('yesPlease') : payload.room_accepted === false ? t('noThanks') : '–']], 'compact people')}</div>`);
+      payload.room_accepted === true ? t('yesPlease') : payload.room_accepted === false ? t('noThanks') : '-']], 'compact people')}</div>`);
   }
   if (state.invite.nightBefore) {
     const title = L(state.invite.nightBefore, 'title') || t('nightBefore');
     parts.push(`<div class="sum-person"><p class="card-label">${esc(title)}</p>${factsHtml(payload.people.map(p =>
-      [p.guest_name, p.night_before === true ? t('willBeThere') : p.night_before === false ? t('cantMake') : '–']), 'compact people')}</div>`);
+      [p.guest_name, p.night_before === true ? t('willBeThere') : p.night_before === false ? t('cantMake') : '-']), 'compact people')}</div>`);
   }
   $('summary').innerHTML = parts.join('');
 }

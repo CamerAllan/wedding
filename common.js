@@ -34,7 +34,7 @@ const DEMO = {
     {day:'Saturday 12th June',day_es:'Sábado 12 de junio',time:'13:30',time_es:'13:30',title:'Ceremony',title_es:'Ceremonia',for:'everyone',rsvp:'wedding'},
     {day:'Saturday 12th June',day_es:'Sábado 12 de junio',time:'14:00',time_es:'14:00',title:'Drinks reception',title_es:'Cóctel de bienvenida',for:'everyone',rsvp:'wedding'},
     {day:'Saturday 12th June',day_es:'Sábado 12 de junio',time:'[time TBC]',time_es:'[hora por confirmar]',title:'Check in to your room',title_es:'Entrada en la habitación',for:'room',rsvp:'room'},
-    {day:'Sunday 13th June',day_es:'Domingo 13 de junio',time:'09:30–10:30',time_es:'09:30–10:30',title:'Breakfast',title_es:'Desayuno',details:'Included with your room, served on the ground floor.',for:'room',rsvp:'room'}
+    {day:'Sunday 13th June',day_es:'Domingo 13 de junio',time:'09:30-10:30',time_es:'09:30-10:30',title:'Breakfast',title_es:'Desayuno',details:'Included with your room, served on the ground floor.',for:'room',rsvp:'room'}
   ]
 };
 DEMO.events = [
@@ -268,7 +268,7 @@ const STR = {
     bringingGuest: 'I’m bringing a guest', alsoInvited: 'You’re also invited: {title}', nightBefore: 'Night-before party',
     willBeThere: 'Will be there', cantMake: 'Can’t make it',
     roomSaved: 'We’ve saved a room for you: {room}', yesPlease: 'Yes please', noThanks: 'No thanks',
-    breakfast: 'Breakfast is included, served 09:30–10:30 on the ground floor.',
+    breakfast: 'Breakfast is included, served 09:30-10:30 on the ground floor.',
     needAnswer: 'A few things still need an answer:', enterGuestName: 'Please enter your guest’s name',
     letUsKnow: '{who}: please let us know if you can come', tellDiet: '{who}: please tell us your dietary requirements',
     chooseCourse: '{who}: please choose a {course}', nbQuestion: '{who}: will you be at the {title}?',
@@ -280,8 +280,8 @@ const STR = {
     sending: 'Sending…', send: 'Send RSVP', sendFailed: 'Sorry, that didn’t send. Please try again.',
     yourRoom: 'Your room', accepted: 'You’ve accepted this room.', declined: 'You’ve declined this room.',
     changeAnswer: 'Change your answer', letUsKnowRoom: 'Let us know if you’d like it',
-    roomNight: 'Night', roomPrice: 'Price', breakfastLabel: 'Breakfast', breakfastShort: 'Included, served 09:30–10:30 on the ground floor', checkoutLabel: 'Check-out', checkoutShort: 'By 11:00',
-    roomFreeShort: 'No charge – it’s on us!', roomIntro: 'We’d love you to join us staying at the castle, so we’ve saved a room for you.',
+    roomNight: 'Night', roomPrice: 'Price', breakfastLabel: 'Breakfast', breakfastShort: 'Included, served 09:30-10:30 on the ground floor', checkoutLabel: 'Check-out', checkoutShort: 'By 11:00',
+    roomFreeShort: 'No charge - it’s on us!', roomIntro: 'We’d love you to join us staying at the castle, so we’ve saved a room for you.',
     roomQ: 'Would you like it?', nbQ: 'Can you make it?', yourAnswer: 'Your answer', dietShort: 'Dietary', theWedding: 'The wedding', orderOfEvents: 'Order of events'
   },
   es: {
