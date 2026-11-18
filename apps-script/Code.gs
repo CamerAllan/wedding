@@ -35,6 +35,10 @@ var SHEET_ID = '1iSff6rU6AE22U6UkYPWBx9CT-mmakGh4iSF3ndRP8QI';
 
 // Who gets an email when someone RSVPs: set in the sheet's "Settings" tab (row "notify_emails",
 // comma-separated). Kept in the sheet rather than here because this file is public on GitHub.
+// The answer saved when a guest's requirements rule out a course's dishes, or they choose it themselves (must match rsvp.js).
+var ALTERNATIVE_DISH = 'Alternative (dietary requirements)';
+// Dietary columns in the Menu tab that are about drinks, so they never limit the food (must match rsvp.js).
+var DRINKS_ONLY = ['Alcohol-free (drinks)', 'Alcohol-free'];
 var FIXED_RESPONSE_COLS = ['updated_at', 'code', 'guest_name', 'is_plus_one', 'attending', 'diets'];
 var TRAILING_RESPONSE_COLS = ['dietary_notes', 'room_accepted', 'message', 'night_before'];
 
@@ -94,7 +98,9 @@ function doPost(e) {
     var now = new Date();
     var rows = people.map(function (p) {
       var ticked = (Array.isArray(p.diets) ? p.diets : []);
-      var diets = ticked.filter(function (d) { return menu.diets.indexOf(d) !== -1; }); // these filter dishes
+      var known = ticked.filter(function (d) { return menu.diets.indexOf(d) !== -1; });
+      // Drinks-only requirements (e.g. alcohol-free) are recorded but don't limit the dishes.
+      var diets = known.filter(function (d) { return DRINKS_ONLY.indexOf(d) === -1; }); // these filter dishes
       var hasOther = ticked.indexOf('Other') !== -1; // free-text requirement in dietary_notes
       var rec = {
         updated_at: now,
@@ -102,7 +108,7 @@ function doPost(e) {
         guest_name: String(p.guest_name || '').slice(0, 100),
         is_plus_one: p.is_plus_one ? 'yes' : 'no',
         attending: p.attending ? 'yes' : 'no',
-        diets: p.attending ? diets.concat(hasOther ? ['Other'] : []).join(', ') : '',
+        diets: p.attending ? known.concat(hasOther ? ['Other'] : []).join(', ') : '',
         dietary_notes: p.attending && hasOther ? String(p.dietary || '').slice(0, 500) : '',
         room_accepted: roomAccepted,
         message: String(body.message || '').slice(0, 2000),
@@ -110,7 +116,8 @@ function doPost(e) {
       };
       menu.courses.forEach(function (c) {
         var choice = p.attending && p.courses ? p.courses[c.name] : '';
-        var valid = c.options.some(function (o) {
+        // "A dish to suit my requirements" is a valid answer for anyone with a dietary requirement.
+        var valid = (choice === ALTERNATIVE_DISH && (diets.length > 0 || hasOther)) || c.options.some(function (o) {
           return o.option === choice && diets.every(function (d) { return o.diets.hasOwnProperty(d); });
         });
         rec[c.name] = valid ? choice : '';
