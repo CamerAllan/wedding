@@ -590,3 +590,9 @@ summary::marker { color:var(--duck); }
 .room-frame { margin:0 0 16px; }
 .room-gallery .room-frame { margin:0; }
 .room-frame img { display:block; width:100%; margin:0 !important; }
+
+/* Name-and-answer rows (night-before, room) in the RSVP summary: the name on the left in normal text,
+   the answer on the right, like the "Attending" line above them. Comes last so phone sizes don't shrink the names. */
+.facts.people > div { grid-template-columns:minmax(0,1fr) auto !important; gap:16px !important; align-items:baseline; }
+.facts.people dt { font:400 1rem/1.5 var(--sans) !important; letter-spacing:0 !important; text-transform:none !important; color:var(--ink) !important; }
+.facts.people dd { text-align:right; }
