@@ -464,9 +464,10 @@ function roomPhotoUrls(r) {
 function roomPhotosHtml(r) {
   const urls = roomPhotoUrls(r), alt = esc(L(r, 'name'));
   if (!urls.length) return '';
-  if (urls.length === 1) return `<img src="${esc(urls[0])}" alt="${alt}">`;
+  // Framed like the maps (.map-frame): a blue border with a thin inner line.
+  if (urls.length === 1) return `<div class="map-frame room-frame"><img src="${esc(urls[0])}" alt="${alt}"></div>`;
   return `<div class="room-gallery">
-    <div class="rg-track">${urls.map((u, i) => `<img src="${esc(u)}" alt="${alt} (${i + 1}/${urls.length})" loading="lazy">`).join('')}</div>
+    <div class="map-frame room-frame"><div class="rg-track">${urls.map((u, i) => `<img src="${esc(u)}" alt="${alt} (${i + 1}/${urls.length})" loading="lazy">`).join('')}</div></div>
     <button type="button" class="rg-prev" aria-label="Previous photo">‹</button>
     <button type="button" class="rg-next" aria-label="Next photo">›</button>
     <div class="rg-dots">${urls.map((_, i) => `<span${i ? '' : ' class="on"'}></span>`).join('')}</div>

@@ -512,7 +512,7 @@ summary::marker { color:var(--duck); }
 .rg-track img { flex:0 0 100%; width:100%; aspect-ratio:3/2; object-fit:cover; scroll-snap-align:start; margin:0 !important; display:block; background:var(--cream); }
 .rg-prev, .rg-next { position:absolute; top:calc(50% - 14px); transform:translateY(-50%); width:34px; height:34px; padding:0; border:0; border-radius:50%;
   background:rgba(248,246,241,.88); color:var(--wine); font:400 1.5rem/34px var(--display); letter-spacing:0; cursor:pointer; min-width:0; }
-.rg-prev { left:8px; } .rg-next { right:8px; }
+.rg-prev { left:22px; } .rg-next { right:22px; }
 .rg-dots { display:flex; justify-content:center; gap:7px; margin-top:8px; }
 .rg-dots span { width:6px; height:6px; border-radius:50%; background:var(--line); }
 .rg-dots span.on { background:var(--wine); }
@@ -585,3 +585,8 @@ summary::marker { color:var(--duck); }
   .faq-strip { overflow-y:auto; -webkit-mask-image:none; mask-image:none; }
   .strip-track { position:static; }
 }
+
+/* Room photos framed like the maps */
+.room-frame { margin:0 0 16px; }
+.room-gallery .room-frame { margin:0; }
+.room-frame img { display:block; width:100%; margin:0 !important; }
