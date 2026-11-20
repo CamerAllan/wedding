@@ -316,8 +316,10 @@ function collect() {
 }
 
 function renderSummary(payload) {
-  // Same pattern as the rest of the site: a name (serif) with its status, then label / value rows.
-  const parts = payload.people.map(p => {
+  // One tinted block per event (the wedding, your room, the night before), each with its own heading,
+  // then the same name / status and label / value rows as the rest of the site.
+  const block = (title, body) => `<section class="sum-block"><h3 class="sum-block-title">${esc(title)}</h3>${body}</section>`;
+  const people = payload.people.map(p => {
     const head = `<div class="sum-head"><h4 class="card-title">${esc(p.guest_name)}</h4>
       <span class="status ${p.attending ? 'yes' : 'no'}">${t(p.attending ? 'attending' : 'notAttending')}</span></div>`;
     if (!p.attending) return `<div class="sum-person">${head}</div>`;
@@ -326,15 +328,15 @@ function renderSummary(payload) {
     if (diet) rows.push([t('dietShort'), diet]);
     return `<div class="sum-person">${head}${factsHtml(rows, 'compact')}</div>`;
   });
-  parts.unshift(`<p class="card-label sum-section">${t('theWedding')}</p>`);   // a heading like the night-before and room ones
+  const parts = [block(t('theWedding'), people.join(''))];
   if (state.invite.room && payload.people.some(p => p.attending)) {
-    parts.push(`<div class="sum-person"><p class="card-label">${t('yourRoom')}</p>${factsHtml([[L(state.invite.room, 'name'),
-      payload.room_accepted === true ? t('yesPlease') : payload.room_accepted === false ? t('noThanks') : '-']], 'compact people')}</div>`);
+    parts.push(block(t('yourRoom'), factsHtml([[L(state.invite.room, 'name'),
+      payload.room_accepted === true ? t('yesPlease') : payload.room_accepted === false ? t('noThanks') : '-']], 'compact people')));
   }
   if (state.invite.nightBefore) {
     const title = L(state.invite.nightBefore, 'title') || t('nightBefore');
-    parts.push(`<div class="sum-person"><p class="card-label">${esc(title)}</p>${factsHtml(payload.people.map(p =>
-      [p.guest_name, p.night_before === true ? t('willBeThere') : p.night_before === false ? t('cantMake') : '-']), 'compact people')}</div>`);
+    parts.push(block(title, factsHtml(payload.people.map(p =>
+      [p.guest_name, p.night_before === true ? t('willBeThere') : p.night_before === false ? t('cantMake') : '-']), 'compact people')));
   }
   $('summary').innerHTML = parts.join('');
 }
