@@ -32,7 +32,7 @@ try {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Italianno&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261120a">
+<link rel="stylesheet" href="style.css?v=20261120b">
 </head>
 <body>
 <main>
@@ -46,7 +46,7 @@ try {
   </header>
 
   <section id="rsvp">
-    <h2><span data-lang="en">RSVP</span><span data-lang="es">Confirmar asistencia</span></h2>
+    <h2 class="sr-only"><span data-lang="en">RSVP</span><span data-lang="es">Confirmar asistencia</span></h2>
     <p class="lead hidden" id="greeting"></p>
     <p class="muted hidden" id="reply-by"><span data-lang="en">Please reply by 1st February 2027.</span><span data-lang="es">Por favor, responded antes del 1 de febrero de 2027.</span></p>
 
@@ -102,8 +102,8 @@ try {
     </div>
   </section>
 </main>
-<script src="common.js?v=20261120a"></script>
-<script src="rsvp.js?v=20261120a"></script>
+<script src="common.js?v=20261120b"></script>
+<script src="rsvp.js?v=20261120b"></script>
 <script>
 // Button/loading text set from JS so they follow the language switch.
 function setStaticRsvpText() { if (!$('submit-btn').disabled) $('submit-btn').textContent = t('send'); $('loading-text').textContent = t('loading1'); }
