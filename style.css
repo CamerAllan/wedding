@@ -357,7 +357,9 @@ main, #gate { border-width:14px; box-shadow:inset 0 0 0 7px var(--paper), inset 
 .panel-wine.replied .if-replied { display:inline; }
 .panel-wine.replied .if-not-replied { display:none; }
 .panel-wine.replied p.panel-caps { display:none; }
-.panel-wine:not(.known) p.panel-caps { visibility:hidden; }
+.panel-wine p.panel-caps { max-height:4em; overflow:hidden; transition:max-height .5s ease, opacity .5s ease, margin .5s ease; }
+/* While we check whether they've replied, the deadline takes up no space; it then eases open (no big empty gap). */
+.panel-wine:not(.known) p.panel-caps { max-height:0; opacity:0; margin-top:0; margin-bottom:12px; }
 .panel-wine.replied .script { margin-bottom:16px; }
 
 /* Phones & tablets: photo centred above the welcome text instead of squeezed beside it */
