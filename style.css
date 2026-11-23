@@ -638,7 +638,12 @@ summary::marker { color:var(--duck); }
 
 /* "Please pay here to reserve the room" under a paying room once they say yes: plain text on a hairline,
    with an outlined button like "Change my answers" */
-.pay-note { margin:18px 0 0; padding-top:16px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px; }
+.pay-note { margin:18px 0 0; padding-top:16px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px 20px; }
+.pay-note .btn-link { margin-left:auto; }   /* always hard right, even when it wraps under the text */
+/* In the blue RSVP summary block: a paper-filled button */
+.sum-block .pay-note { margin-top:0; }
+.sum-block .pay-note .btn-link { background:var(--paper); }
+.sum-block .pay-note .btn-link:hover { background:var(--wine); color:var(--paper); }
 .pay-note p { margin:0; }
 .pay-note .btn-link { display:inline-block; text-decoration:none; background:none; color:var(--wine); border:1px solid var(--wine); }
 .pay-note .btn-link:hover { background:var(--wine); color:var(--paper); }
