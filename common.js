@@ -243,6 +243,25 @@ function adoptInviteLang(invite) {
   try { manual = localStorage.getItem(LANG_MANUAL_KEY); } catch (e) {}
   if (!manual && invite && invite.lang && invite.lang !== getLang()) setLang(invite.lang, false);
 }
+// Spanish text shown in capitals (titles, labels, buttons) drops its accents: "COMO LLEGAR", not "CÓMO LLEGAR".
+// Only acute accents go; ñ and ü stay. Runs on load, on language change, and on anything added to the page later.
+const ACCENTS = { 'á':'a', 'é':'e', 'í':'i', 'ó':'o', 'ú':'u', 'Á':'A', 'É':'E', 'Í':'I', 'Ó':'O', 'Ú':'U' };
+function stripCapsAccents(root) {
+  if (getLang() !== 'es' || !root) return;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+    if (!/[áéíóúÁÉÍÓÚ]/.test(n.nodeValue) || !n.parentElement) continue;
+    if (getComputedStyle(n.parentElement).textTransform !== 'uppercase') continue;
+    n.nodeValue = n.nodeValue.replace(/[áéíóúÁÉÍÓÚ]/g, c => ACCENTS[c]);
+  }
+}
+document.addEventListener('DOMContentLoaded', () => {
+  stripCapsAccents(document.body);
+  new MutationObserver(ms => { if (getLang() === 'es') ms.forEach(m => m.addedNodes.forEach(n => stripCapsAccents(n.nodeType === 1 ? n : n.parentElement))); })
+    .observe(document.body, { childList: true, subtree: true });
+});
+document.addEventListener('langchange', () => stripCapsAccents(document.body));
+
 function L(obj, field) { return (obj && getLang() === 'es' && obj[field + '_es']) || (obj && obj[field]) || ''; }
 
 // Names from the sheet's column headers (courses, dietary requirements). Unknown names are shown as written.
