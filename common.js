@@ -520,8 +520,14 @@ function money(v) {
 function roomCardHtml(r) {
   // Guests whose room is on us see no price row at all, and nothing about payment.
   const price = r.free ? '' : money(L(r, 'price'));
-  return `${roomPhotosHtml(r)}
-    <h3 class="card-title">${esc(L(r, 'name'))}</h3>
-    ${L(r, 'description') ? `<p class="card-lead">${esc(L(r, 'description'))}</p>` : ''}
-    ${factsHtml([[t('roomNight'), esc(L(r, 'nights'))], [t('roomPrice'), esc(price)], [t('breakfastLabel'), esc(t('breakfastShort'))], [t('checkoutLabel'), esc(t('checkoutShort'))]], 'compact')}`;
+  // Photos and details sit side by side in a wide card (photos on the right), stacked in a narrow one.
+  const photos = roomPhotosHtml(r);
+  return `<div class="room-layout${photos ? '' : ' no-photos'}">
+    ${photos ? `<div class="room-photos">${photos}</div>` : ''}
+    <div class="room-info">
+      <h3 class="card-title">${esc(L(r, 'name'))}</h3>
+      ${L(r, 'description') ? `<p class="card-lead">${esc(L(r, 'description'))}</p>` : ''}
+      ${factsHtml([[t('roomNight'), esc(L(r, 'nights'))], [t('roomPrice'), esc(price)], [t('breakfastLabel'), esc(t('breakfastShort'))], [t('checkoutLabel'), esc(t('checkoutShort'))]], 'compact')}
+    </div>
+  </div>`;
 }
