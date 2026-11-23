@@ -18,18 +18,6 @@ function eventsFor(data) {
 }
 
 
-/** Split the free-text details into plain paragraphs and "Label: text" facts (e.g. "Dress code: …"). */
-function splitDetails(text) {
-  const paras = [], facts = [];
-  String(text || '').split(/\n+/).map(s => s.trim()).filter(Boolean).forEach(line => {
-    const m = line.match(/^([^:\[\]]{2,24}):\s*(.+)$/);
-    // A one-phrase value ("casual.") reads better without a full stop.
-    if (m) facts.push([m[1], (m[2].charAt(0).toUpperCase() + m[2].slice(1)).replace(/^([^.!?]*)\.$/, '$1')]);
-    else paras.push(line);
-  });
-  return { paras, facts };
-}
-
 const factRow = (label, html) => `<div><dt>${esc(label)}</dt><dd>${html}</dd></div>`;
 const mapEmbed = q => `<div class="event-map"><div class="map-frame"><iframe title="${esc(q)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
   src="https://www.google.com/maps?q=${encodeURIComponent(q)}&z=14&output=embed"></iframe></div></div>`;

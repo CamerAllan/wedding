@@ -516,6 +516,18 @@ function money(v) {
   return getLang() === 'es' ? txt.replace('.', ',') + ' £' : '£' + txt;
 }
 
+/** Split the free-text details into plain paragraphs and "Label: text" facts (e.g. "Dress code: …"). */
+function splitDetails(text) {
+  const paras = [], facts = [];
+  String(text || '').split(/\n+/).map(s => s.trim()).filter(Boolean).forEach(line => {
+    const m = line.match(/^([^:\[\]]{2,24}):\s*(.+)$/);
+    // A one-phrase value ("casual.") reads better without a full stop.
+    if (m) facts.push([m[1], (m[2].charAt(0).toUpperCase() + m[2].slice(1)).replace(/^([^.!?]*)\.$/, '$1')]);
+    else paras.push(line);
+  });
+  return { paras, facts };
+}
+
 /** A room: photo(s), name, description, then night / price / breakfast rows. Values are escaped here. */
 function roomCardHtml(r) {
   // Guests whose room is on us see no price row at all, and nothing about payment.

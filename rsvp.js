@@ -178,8 +178,12 @@ function renderForm() {
       <h3 class="step-title">${esc(L(n, 'title') || t('nightBefore'))}</h3>
       <p class="step-intro">${esc(t('alsoInvitedShort'))}</p>
       <div class="card">
-        ${L(n, 'details') ? `<p class="card-lead">${esc(L(n, 'details'))}</p>` : ''}
-        ${factsHtml([[t('when'), esc(L(n, 'when'))], [t('where'), esc(L(n, 'where'))]], 'compact')}
+        ${(() => {
+          // Same as the Details page: "Dress code: …" lines become rows under When and Where.
+          const { paras, facts } = splitDetails(L(n, 'details'));
+          return paras.map(x => `<p class="card-lead">${esc(x)}</p>`).join('')
+            + factsHtml([[t('when'), esc(L(n, 'when'))], [t('where'), esc(L(n, 'where'))], ...facts.map(([k, v]) => [k, esc(v)])], 'compact');
+        })()}
         <p class="card-label">${t('nbQ')}</p>
         ${people().map(p => {
           const ex = existingFor(p);
