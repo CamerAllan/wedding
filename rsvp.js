@@ -48,6 +48,7 @@ function isAttending(idx) {
 function allDeclined() {
   return people().every(p => p.plus ? !isActive(p.idx) : document.querySelector(`input[name="att${p.idx}"]:checked`)?.value === 'no');
 }
+const anyoneAttending = () => people().some(p => isAttending(p.idx));
 function personName(idx) {
   if (!isPlusIdx(idx)) return state.invite.guests[idx];
   return document.getElementById(`p${idx}-name`)?.value.trim() || t('yourGuest');
@@ -151,7 +152,7 @@ function syncPeople() {
     card.querySelector('.meal-name').textContent = personName(p.idx);
   });
   show($('step-meals'), anyone);
-  show($('room'), !!state.invite.room && !allDeclined());   // no room offer for a household that isn't coming
+  show($('room'), !!state.invite.room && anyone);   // like the menu: the room appears once someone says they're coming
   syncNightBefore();
 }
 
@@ -276,7 +277,7 @@ function validate() {
       if (fs.querySelector('.dish') && !fs.querySelector('input:checked')) add(fs, t('chooseCourse', { who, course: term(fs.dataset.course).toLowerCase() }));
     });
   });
-  if (state.invite.room && !allDeclined() && !document.querySelector('input[name=room]:checked')) add($('room').querySelector('.card'), t('roomQuestion', { room: L(state.invite.room, 'name') }));
+  if (state.invite.room && anyoneAttending() && !document.querySelector('input[name=room]:checked')) add($('room').querySelector('.card'), t('roomQuestion', { room: L(state.invite.room, 'name') }));
   document.querySelectorAll('.nb-row').forEach(row => {
     if (row.classList.contains('hidden') || row.querySelector('input:checked')) return;
     add(row, t('nbQuestion', { who: row.querySelector('.nb-name').textContent, title: L(state.invite.nightBefore, 'title') || t('nightBefore') }));
@@ -330,7 +331,7 @@ function collect() {
   return {
     code: state.invite.code,
     people: out,
-    room_accepted: !state.invite.room ? null : allDeclined() ? false : roomVal === 'yes' ? true : roomVal === 'no' ? false : null,
+    room_accepted: !state.invite.room ? null : allDeclined() ? false : !anyoneAttending() ? null : roomVal === 'yes' ? true : roomVal === 'no' ? false : null,
     message: $('message').value.trim()
   };
 }
