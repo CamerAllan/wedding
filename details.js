@@ -39,7 +39,7 @@ const mapEmbed = q => `<div class="event-map"><div class="map-frame"><iframe tit
 const DOODLES = {
   night_before: [['disco', 'c hang', 50, -22, 76], ['cheers', 'l', 18, 46, 104], ['drink', 'r', 82, 26, 56]],
   wedding: [['cake', 'c', 50, 18, 98]],
-  morning_after: [['cloche', 'c', 50, 48, 118], ['vase', 'l', 20, 26, 58], ['card', 'corner', null, 'bottom', 58]]
+  morning_after: [['cloche', 'c', 50, 48, 118], ['cake-slice', 'l', 20, 40, 64], ['card', 'r', 80, 30, 52]]
 };
 const TWINKLES = [['twinkle-1', 'tw a', 36, 32, 16], ['twinkle-2', 'tw b', 64, 84, 13], ['twinkle-1', 'tw c', 69, 26, 11]];
 // y is pixels from the top, or 'bottom' to sit in the panel's bottom corner.
