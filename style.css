@@ -651,8 +651,9 @@ summary::marker { color:var(--duck); }
 /* Room card: details on the left and photos on the right when the card is wide; stacked (photos first) when narrow */
 .card.room { container-type:inline-size; }
 @container (min-width: 600px) {
-  /* Name and description across the top; the details table and the photos start level underneath */
-  .room-layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); grid-template-areas:"head head" "info photos"; column-gap:28px; align-items:start; }
+  /* Name and description above the table in the left column (never running across over the photo);
+     the details table and the photos start level */
+  .room-layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); grid-template-areas:"head ." "info photos"; column-gap:28px; align-items:start; }
   .room-layout .room-head { grid-area:head; }
   .room-layout .room-info { grid-area:info; }
   .room-layout .room-photos { grid-area:photos; }
