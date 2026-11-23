@@ -636,8 +636,9 @@ summary::marker { color:var(--duck); }
   .event-map iframe { aspect-ratio:16/10 !important; height:auto; }
 }
 
-/* "Please send £110 for your room via PayPal" under a paying room once they say yes */
-.pay-note { margin:16px 0 0; padding:14px 16px; background:#eef4f6; border-left:3px solid var(--duck); }
-.pay-note p { margin:0 0 10px; }
-.pay-note .btn-link { display:inline-block; text-decoration:none; }
-.sum-block .pay-note { background:var(--paper); margin-top:12px; }
+/* "Please pay here to reserve the room" under a paying room once they say yes: plain text on a hairline,
+   with an outlined button like "Change my answers" */
+.pay-note { margin:18px 0 0; padding-top:16px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px; }
+.pay-note p { margin:0; }
+.pay-note .btn-link { display:inline-block; text-decoration:none; background:none; color:var(--wine); border:1px solid var(--wine); }
+.pay-note .btn-link:hover { background:var(--wine); color:var(--paper); }

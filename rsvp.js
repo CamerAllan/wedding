@@ -6,12 +6,12 @@ function optionLabel(course, value) {
 }
 
 const PAYPAL_ME = 'https://paypal.me/camerallan';
-/** "Please send £110 for your room via PayPal" with a button, for rooms that have a price. Empty for free rooms. */
+/** "Please pay here to reserve the room" with a PayPal button (amount filled in), for rooms that have a price. Empty for free rooms. */
 function roomPayHtml(r, cls) {
   if (!r || r.free || !String(r.price || '').trim()) return '';
   const m = String(r.price).trim().match(/^£?\s*(\d+(?:\.\d{1,2})?)$/), amount = m ? m[1] : '';   // e.g. 110 or £110
   const url = PAYPAL_ME + (amount ? '/' + amount + 'GBP' : '');
-  return `<div class="pay-note ${cls}"><p>${esc(t('payRoom', { price: money(L(r, 'price')) }))}</p>
+  return `<div class="pay-note ${cls}"><p>${esc(t('payRoom'))}</p>
     <a class="btn-link" href="${url}" target="_blank" rel="noopener">${esc(t('payBtn'))}</a></div>`;
 }
 
