@@ -618,3 +618,10 @@ summary::marker { color:var(--duck); }
   .event-map .map-frame { position:absolute; inset:0; display:flex; }
   .event-map iframe { aspect-ratio:auto !important; min-height:0; height:100%; flex:1; }
 }
+
+/* An illustration tucked into a panel's bottom-right corner (e.g. the card on the morning after) */
+.framed .doodle.corner { left:auto; top:auto; right:22px; bottom:18px; transform:none; }
+@media (max-width: 600px) {
+  .event-section.framed.has-corner { padding-bottom:86px; }
+  .framed .doodle.corner { right:20px; bottom:16px; }
+}

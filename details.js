@@ -39,11 +39,12 @@ const mapEmbed = q => `<div class="event-map"><div class="map-frame"><iframe tit
 const DOODLES = {
   night_before: [['disco', 'c hang', 50, -22, 76], ['cheers', 'l', 18, 46, 104], ['drink', 'r', 82, 26, 56]],
   wedding: [['cake', 'c', 50, 18, 98]],
-  morning_after: [['cloche', 'c', 50, 48, 118], ['vase', 'l', 20, 26, 58], ['strawberry', 'r', 80, 52, 46]]
+  morning_after: [['cloche', 'c', 50, 48, 118], ['vase', 'l', 20, 26, 58], ['card', 'corner', null, 'bottom', 58]]
 };
 const TWINKLES = [['twinkle-1', 'tw a', 36, 32, 16], ['twinkle-2', 'tw b', 64, 84, 13], ['twinkle-1', 'tw c', 69, 26, 11]];
+// y is pixels from the top, or 'bottom' to sit in the panel's bottom corner.
 const doodle = ([name, cls, x, y, w]) =>
-  `<i class="doodle ${cls}" style="left:${x}%;top:${y}px;--w:${w}px"><img src="img/party/${name}.svg" alt=""></i>`;
+  `<i class="doodle ${cls}" style="${y === 'bottom' ? '' : `left:${x}%;top:${y}px;`}--w:${w}px"><img src="img/party/${name}.svg" alt=""></i>`;
 const eventHead = id => DOODLES[id]
   ? `<div class="doodles" aria-hidden="true">${[...DOODLES[id], ...TWINKLES].map(doodle).join('')}</div>` : '';
 
@@ -68,8 +69,8 @@ withInvite(data => {
         ${paras.map(p => `<p>${esc(p)}</p>`).join('')}
         ${factRows ? `<dl class="facts">${factRows}</dl>` : ''}
       </div>`;
-    const framed = !!DOODLES[id];
-    return `<section class="event-section${framed ? ' framed' : ''}" id="${id}">
+    const framed = !!DOODLES[id], corner = framed && DOODLES[id].some(d => d[3] === 'bottom');
+    return `<section class="event-section${framed ? ' framed' : ''}${corner ? ' has-corner' : ''}" id="${id}">
       ${eventHead(id)}
       <h2>${esc(title)}</h2>
       ${withMap ? `<div class="event-body">${text}${mapEmbed(loc)}</div>` : text}
