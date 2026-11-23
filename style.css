@@ -563,7 +563,7 @@ summary::marker { color:var(--duck); }
   .framed .doodle { width:calc(var(--w) * .82); }
   .framed .doodle.hang { top:-20px !important; }
   .framed .doodle.l { left:16% !important; } .framed .doodle.r { left:85% !important; }
-  .framed .tw.a { left:32% !important; } .framed .tw.b { left:68% !important; } .framed .tw.c { left:72% !important; } .framed .tw.d { left:32% !important; }
+  .framed .tw.a { left:32% !important; } .framed .tw.b { left:68% !important; } .framed .tw.c { left:72% !important; } .framed .tw.d { left:calc(32% - 8px) !important; }
 }
 
 .diet-note { margin:6px 0 0; font-size:.9rem; }

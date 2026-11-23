@@ -44,9 +44,9 @@ const DOODLES = {
 const TWINKLES = [['twinkle-1', 'tw a', 36, 32, 16], ['twinkle-2', 'tw b', 64, 84, 13], ['twinkle-1', 'tw c', 69, 26, 11]];
 // y is pixels from the top, or 'bottom' to sit in the panel's bottom corner.
 const doodle = ([name, cls, x, y, w]) =>
-  `<i class="doodle ${cls}" style="${y === 'bottom' ? '' : `left:${x}%;top:${y}px;`}--w:${w}px"><img src="img/party/${name}.svg" alt=""></i>`;
+  `<i class="doodle ${cls}" style="${y === 'bottom' ? '' : `left:${typeof x === 'string' ? x : x + '%'};top:${y}px;`}--w:${w}px"><img src="img/party/${name}.svg" alt=""></i>`;
 // Which events get the twinkles, plus any extra ones (the wedding has one more, lower left, to balance the cake).
-const EXTRA_TWINKLES = { wedding: [['twinkle-2', 'tw d', 36, 84, 13]] };
+const EXTRA_TWINKLES = { wedding: [['twinkle-2', 'tw d', 'calc(36% - 10px)', 84, 13]] };
 const NO_TWINKLES = ['morning_after'];
 const eventHead = id => DOODLES[id]
   ? `<div class="doodles" aria-hidden="true">${[...DOODLES[id], ...(NO_TWINKLES.includes(id) ? [] : [...TWINKLES, ...(EXTRA_TWINKLES[id] || [])])].map(doodle).join('')}</div>` : '';
