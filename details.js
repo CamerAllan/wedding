@@ -37,7 +37,7 @@ const mapEmbed = q => `<div class="event-map"><div class="map-frame"><iframe tit
 // ---- Each event gets a framed panel topped with hand-drawn illustrations (img/party, recoloured to the site's ink) ----
 // [file, position class, left %, top px, width px]. l / c / r and the twinkles a / b / c move a little on phones.
 const DOODLES = {
-  night_before: [['disco', 'c hang', 50, -22, 76], ['cheers', 'l', 18, 34, 104], ['drink', 'r', 82, 26, 56]],
+  night_before: [['disco', 'c hang', 50, -22, 76], ['cheers', 'l', 18, 46, 104], ['drink', 'r', 82, 26, 56]],
   wedding: [['cake', 'c', 50, 18, 98], ['bouquet', 'l', 19, 24, 66], ['tower', 'r', 81, 24, 86]],
   morning_after: [['cloche', 'c', 50, 48, 118], ['vase', 'l', 20, 26, 58], ['strawberry', 'r', 80, 52, 46]]
 };
