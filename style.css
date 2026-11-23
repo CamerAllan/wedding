@@ -660,3 +660,7 @@ summary::marker { color:var(--duck); }
   .room-layout .room-photos .room-frame { margin-bottom:0; }
   .room-layout.no-photos { display:block; }
 }
+
+/* The card always reaches the bottom of the window, even on short pages (matches the lock screen) */
+main, #gate { min-height:calc(100vh - 54px); min-height:calc(100dvh - 54px); }
+@media (max-width:520px) { main, #gate { min-height:calc(100vh - 16px); min-height:calc(100dvh - 16px); } }
