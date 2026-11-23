@@ -32,7 +32,7 @@ try {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Italianno&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261123m">
+<link rel="stylesheet" href="style.css?v=20261123n">
 </head>
 <body>
 <main>
@@ -51,7 +51,7 @@ try {
     <p class="muted hidden" id="reply-by"><span data-lang="en">Please reply by 1st February 2027.</span><span data-lang="es">Por favor, responded antes del 1 de febrero de 2027.</span></p>
 
     <!-- Step 1: enter code -->
-    <form id="code-form" class="card">
+    <form id="code-form" class="card hidden">
       <label for="code-input"><span data-lang="en">Your invite code (it’s on your invitation)</span><span data-lang="es">Tu código de invitación (aparece en la invitación)</span></label>
       <div class="row">
         <input id="code-input" type="text" autocomplete="off" autocapitalize="characters" placeholder="e.g. K7QX9P" required>
@@ -60,9 +60,9 @@ try {
       <div id="code-error" class="error hidden"></div>
     </form>
 
-    <div id="loading" class="loading hidden" role="status">
+    <div id="loading" class="loading" role="status">
       <span class="spinner" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span id="loading-text"></span>
+      <span id="loading-text"><span data-lang="en">Finding your invite…</span><span data-lang="es">Buscando tu invitación…</span></span>
     </div>
 
     <!-- Step 2: RSVP form -->
@@ -102,8 +102,8 @@ try {
     </div>
   </section>
 </main>
-<script src="common.js?v=20261123m"></script>
-<script src="rsvp.js?v=20261123m"></script>
+<script src="common.js?v=20261123n"></script>
+<script src="rsvp.js?v=20261123n"></script>
 <script>
 // Button/loading text set from JS so they follow the language switch.
 function setStaticRsvpText() { if (!$('submit-btn').disabled) $('submit-btn').textContent = t('send'); $('loading-text').textContent = t('loading1'); }
