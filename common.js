@@ -85,18 +85,33 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt
 // ---- Remembered invite code (shared by all pages) ----
 // Any page opened with ?code=XXXX remembers it, so the other pages can show that household's details.
 const CODE_KEY = 'weddingInviteCode', VERIFIED_KEY = 'weddingVerified';
-function storeCode(code) { try { localStorage.setItem(CODE_KEY, code); } catch (e) {} }
+// The code is kept per tab (sessionStorage) first, so two tabs open on different invites never swap;
+// localStorage is only the fallback for a fresh visit without a code in the link.
+function storeCode(code) { try { sessionStorage.setItem(CODE_KEY, code); localStorage.setItem(CODE_KEY, code); } catch (e) {} }
 function getCode() {
   const fromUrl = new URLSearchParams(location.search).get('code');
-  if (fromUrl) { storeCode(fromUrl.trim().toUpperCase()); return fromUrl.trim().toUpperCase(); }
-  try { return localStorage.getItem(CODE_KEY) || ''; } catch (e) { return ''; }
+  if (fromUrl) { const c = fromUrl.trim().toUpperCase(); storeCode(c); return c; }
+  try { return sessionStorage.getItem(CODE_KEY) || localStorage.getItem(CODE_KEY) || ''; } catch (e) { return ''; }
 }
 
 // ---- Lock: the whole site needs an invite code + a surname from that invite ----
 // Once passed, this browser remembers it ({ code, name }). The backend checks the surname too.
-function getVerified() { try { return JSON.parse(localStorage.getItem(VERIFIED_KEY) || 'null'); } catch (e) { return null; } }
-function setVerified(code, name) { try { localStorage.setItem(VERIFIED_KEY, JSON.stringify({ code, name })); } catch (e) {} }
-function clearVerified() { try { localStorage.removeItem(VERIFIED_KEY); } catch (e) {} }
+// Remembered per code, so unlocking one invite in this browser doesn't lock another tab out of a different one.
+const VERIFIED_ALL_KEY = 'weddingVerifiedAll';
+function verifiedMap() { try { return JSON.parse(localStorage.getItem(VERIFIED_ALL_KEY) || '{}') || {}; } catch (e) { return {}; } }
+function getVerified() {
+  const code = getCode(), map = verifiedMap();
+  if (code && map[code]) return { code, name: map[code] };
+  try { return JSON.parse(localStorage.getItem(VERIFIED_KEY) || 'null'); } catch (e) { return null; }   // older single entry
+}
+function setVerified(code, name) {
+  try { const map = verifiedMap(); map[code] = name; localStorage.setItem(VERIFIED_ALL_KEY, JSON.stringify(map));
+        localStorage.setItem(VERIFIED_KEY, JSON.stringify({ code, name })); } catch (e) {}
+}
+function clearVerified() {
+  try { const map = verifiedMap(); delete map[getCode()]; localStorage.setItem(VERIFIED_ALL_KEY, JSON.stringify(map));
+        localStorage.removeItem(VERIFIED_KEY); } catch (e) {}
+}
 function isUnlocked() { const v = getVerified(); return !!v && v.code === getCode(); }
 /** Run fn now if the site is unlocked, otherwise as soon as the guest gets past the lock. */
 function whenUnlocked(fn) {
@@ -131,7 +146,7 @@ function showGate() {
   gate.id = 'gate';
   gate.innerHTML = `
     <header><div class="castle"><canvas class="fireworks" aria-hidden="true"></canvas><img src="img/castle.png" alt="" width="1422" height="994"></div>
-    <p class="formal"><span data-lang="en">We invite you to celebrate <span class="nowrap">the marriage of</span></span><span data-lang="es">Os invitamos a celebrar <span class="nowrap">el enlace de</span></span></p>
+    <p class="formal"><span data-lang="en">We invite you to celebrate <span class="nowrap">the marriage of</span></span><span data-lang="es">Os invitamos a celebrar <span class="nowrap">la boda de</span></span></p>
     <h1 class="names"><span class="first">Cameron</span><span class="last">Allan</span><span class="and"><span data-lang="en">and</span><span data-lang="es">y</span></span><span class="first">Annie</span><span class="last">MacConnachie</span></h1></header>
     <form class="card" id="gate-form" novalidate>
       <p style="margin-top:0">${code
@@ -215,16 +230,18 @@ function getInvite(code) {
   return invitePromises[code];
 }
 
-// Keep the code on nav links too, in case the browser blocks storage.
-document.addEventListener('DOMContentLoaded', () => {
+// Every link to another page of the site carries this tab's code, so each tab stays on its own household
+// (opening several guests' links at once no longer mixes them up). Covers links added later too.
+function withCode(a) {
   const code = getCode();
-  if (!code) return;
-  document.querySelectorAll('.site-nav a, a[data-keep-code]').forEach(a => {
-    const u = new URL(a.href, location.href);
-    u.searchParams.set('code', code);
-    a.href = u.pathname.split('/').pop() + u.search;
-  });
-});
+  if (!code || !a || !a.getAttribute('href')) return;
+  const u = new URL(a.getAttribute('href'), location.href);
+  if (u.origin !== location.origin || !/(\.html|\/)$/.test(u.pathname) || u.searchParams.get('code') === code) return;
+  u.searchParams.set('code', code);
+  a.href = u.pathname.split('/').pop() + u.search + u.hash;
+}
+document.addEventListener('DOMContentLoaded', () => document.querySelectorAll('a[href]').forEach(withCode));
+['click', 'auxclick', 'contextmenu'].forEach(ev => document.addEventListener(ev, e => withCode(e.target.closest && e.target.closest('a[href]')), true));
 
 // ---- Language (English / Spanish) ----
 // Static page text is written twice, in <span data-lang="en"> and <span data-lang="es">, and CSS shows the right one
