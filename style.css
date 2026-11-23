@@ -610,3 +610,11 @@ summary::marker { color:var(--duck); }
 
 /* Page titles are kept for screen readers but not shown */
 .sr-only { position:absolute !important; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+
+/* Desktop: the map is exactly as tall as the text beside it (no tall map leaving a gap under the text) */
+@media (min-width:721px) {
+  .event-body { align-items:stretch; }
+  .event-map { position:relative; min-height:260px; }
+  .event-map .map-frame { position:absolute; inset:0; display:flex; }
+  .event-map iframe { aspect-ratio:auto !important; min-height:0; height:100%; flex:1; }
+}
