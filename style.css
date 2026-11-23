@@ -635,3 +635,9 @@ summary::marker { color:var(--duck); }
   .event-map .map-frame { position:static; display:block; }
   .event-map iframe { aspect-ratio:16/10 !important; height:auto; }
 }
+
+/* "Please send £110 for your room via PayPal" under a paying room once they say yes */
+.pay-note { margin:16px 0 0; padding:14px 16px; background:#eef4f6; border-left:3px solid var(--duck); }
+.pay-note p { margin:0 0 10px; }
+.pay-note .btn-link { display:inline-block; text-decoration:none; }
+.sum-block .pay-note { background:var(--paper); margin-top:12px; }

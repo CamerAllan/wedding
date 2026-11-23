@@ -5,6 +5,16 @@ function optionLabel(course, value) {
   return o ? (L(o, 'option') || value) : value;
 }
 
+const PAYPAL_ME = 'https://paypal.me/camerallan';
+/** "Please send £110 for your room via PayPal" with a button, for rooms that have a price. Empty for free rooms. */
+function roomPayHtml(r, cls) {
+  if (!r || r.free || !String(r.price || '').trim()) return '';
+  const m = String(r.price).trim().match(/^£?\s*(\d+(?:\.\d{1,2})?)$/), amount = m ? m[1] : '';   // e.g. 110 or £110
+  const url = PAYPAL_ME + (amount ? '/' + amount + 'GBP' : '');
+  return `<div class="pay-note ${cls}"><p>${esc(t('payRoom', { price: money(L(r, 'price')) }))}</p>
+    <a class="btn-link" href="${url}" target="_blank" rel="noopener">${esc(t('payBtn'))}</a></div>`;
+}
+
 // Chosen automatically when a guest's dietary requirements rule out every dish in a course.
 const TBC_DISH = 'Alternative (dietary requirements)';
 // Requirements that are about drinks, so they're recorded but never change the food options.
@@ -203,8 +213,14 @@ function renderForm() {
           <label><input type="radio" name="room" value="yes" ${acc==='yes'?'checked':''}> ${t('yesPlease')}</label>
           <label><input type="radio" name="room" value="no" ${acc==='no'?'checked':''}> ${t('noThanks')}</label>
         </div>
+        ${roomPayHtml(r, 'room-pay' + (acc === 'yes' ? '' : ' hidden'))}
       </div>`;
     show(roomEl, true);
+    // Paying rooms: once they say yes, show how to pay (nothing appears for rooms that are on us).
+    roomEl.querySelectorAll('input[name=room]').forEach(i => i.addEventListener('change', () => {
+      const pay = roomEl.querySelector('.room-pay');
+      if (pay) show(pay, i.value === 'yes' && i.checked);
+    }));
   } else {
     roomEl.innerHTML = '';
     show(roomEl, false);
@@ -331,7 +347,8 @@ function renderSummary(payload) {
   const parts = [block(t('theWedding'), people.join(''))];
   if (state.invite.room && payload.people.some(p => p.attending)) {
     parts.push(block(t('yourRoom'), factsHtml([[L(state.invite.room, 'name'),
-      payload.room_accepted === true ? t('yesPlease') : payload.room_accepted === false ? t('noThanks') : '-']], 'compact people')));
+      payload.room_accepted === true ? t('yesPlease') : payload.room_accepted === false ? t('noThanks') : '-']], 'compact people')
+      + (payload.room_accepted === true ? roomPayHtml(state.invite.room, 'in-summary') : '')));
   }
   if (state.invite.nightBefore) {
     const title = L(state.invite.nightBefore, 'title') || t('nightBefore');
