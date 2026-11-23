@@ -664,3 +664,8 @@ summary::marker { color:var(--duck); }
 /* The card always reaches the bottom of the window, even on short pages (matches the lock screen) */
 main, #gate { min-height:calc(100vh - 54px); min-height:calc(100dvh - 54px); }
 @media (max-width:520px) { main, #gate { min-height:calc(100vh - 16px); min-height:calc(100dvh - 16px); } }
+
+/* Meal choices: each person's card sits side by side when there's room (two or more across on desktop),
+   stacked on phones. A household of one keeps the full width. */
+#meals { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap:16px; align-items:start; }
+#meals > .person { margin:0; }
