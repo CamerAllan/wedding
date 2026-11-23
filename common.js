@@ -524,9 +524,11 @@ function roomCardHtml(r) {
   const photos = roomPhotosHtml(r);
   return `<div class="room-layout${photos ? '' : ' no-photos'}">
     ${photos ? `<div class="room-photos">${photos}</div>` : ''}
-    <div class="room-info">
+    <div class="room-head">
       <h3 class="card-title">${esc(L(r, 'name'))}</h3>
       ${L(r, 'description') ? `<p class="card-lead">${esc(L(r, 'description'))}</p>` : ''}
+    </div>
+    <div class="room-info">
       ${factsHtml([[t('roomNight'), esc(L(r, 'nights'))], [t('roomPrice'), esc(price)], [t('breakfastLabel'), esc(t('breakfastShort'))], [t('checkoutLabel'), esc(t('checkoutShort'))]], 'compact')}
     </div>
   </div>`;
