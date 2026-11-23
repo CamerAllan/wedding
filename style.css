@@ -625,3 +625,13 @@ summary::marker { color:var(--duck); }
   .event-section.framed.has-corner { padding-bottom:86px; }
   .framed .doodle.corner { right:20px; bottom:16px; }
 }
+
+/* Event panels lay themselves out by their own width, not the window's: in a narrow panel the side padding
+   shrinks and the map moves under the text, so the details aren't squeezed into a thin column. */
+.event-section.framed { container-type:inline-size; padding-left:clamp(22px, 6%, 72px); padding-right:clamp(22px, 6%, 72px); }
+@container (max-width: 700px) {
+  .event-body { grid-template-columns:minmax(0,1fr) !important; align-items:start; }
+  .event-map { position:static; min-height:0; }
+  .event-map .map-frame { position:static; display:block; }
+  .event-map iframe { aspect-ratio:16/10 !important; height:auto; }
+}
