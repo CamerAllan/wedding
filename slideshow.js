@@ -1,4 +1,5 @@
-// Cross-fade through the photos listed in data-photos; tap a photo to skip ahead.
+// Cross-fade through the photos listed in data-photos, 3 seconds each. Tap a photo to skip ahead;
+// press and hold to pause on it (it carries on when you let go).
 (function () {
   var wrap = document.querySelector('.slideshow');
   var srcs = (wrap.dataset.photos || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
@@ -24,7 +25,25 @@
     prevTimer = setTimeout(function () { old.classList.remove('prev'); }, 1300);
   }
   load(1);
-  function start() { clearInterval(timer); timer = setInterval(function () { show(i + 1); }, 5000); }
-  wrap.addEventListener('click', function () { show(i + 1); start(); });
+  var PER_PHOTO = 3000;
+  function start() { clearInterval(timer); timer = setInterval(function () { show(i + 1); }, PER_PHOTO); }
+  function stop() { clearInterval(timer); }
+
+  // Press and hold pauses; a quick tap skips to the next photo.
+  var downAt = 0, held = false, holdTimer;
+  wrap.addEventListener('pointerdown', function () {
+    downAt = Date.now(); held = false;
+    clearTimeout(holdTimer);
+    holdTimer = setTimeout(function () { held = true; stop(); wrap.classList.add('paused'); }, 250);
+  });
+  function release() {
+    clearTimeout(holdTimer);
+    if (held) { wrap.classList.remove('paused'); start(); }
+  }
+  wrap.addEventListener('pointerup', release);
+  wrap.addEventListener('pointercancel', release);
+  wrap.addEventListener('pointerleave', release);
+  wrap.addEventListener('click', function () { if (held) { held = false; return; } show(i + 1); start(); });
+  wrap.addEventListener('contextmenu', function (e) { e.preventDefault(); });   // no "save image" menu on a long press
   start();
 })();

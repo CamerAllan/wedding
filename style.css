@@ -670,3 +670,7 @@ main, #gate { min-height:calc(100vh - 54px); min-height:calc(100dvh - 54px); }
    stacked on phones. A household of one keeps the full width. */
 #meals { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap:16px; align-items:start; }
 #meals > .person { margin:0; }
+
+/* Slideshow: holding a photo pauses it, so stop the phone's long-press image menu and text selection */
+.slideshow { -webkit-touch-callout:none; -webkit-user-select:none; user-select:none; touch-action:manipulation; }
+.slideshow img { -webkit-user-drag:none; pointer-events:none; }
