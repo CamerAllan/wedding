@@ -10,7 +10,10 @@ const PAYPAL_ME = 'https://paypal.me/camerallan';
 function roomPayHtml(r, cls) {
   if (!r || r.free || !String(r.price || '').trim()) return '';
   const m = String(r.price).trim().match(/^£?\s*(\d+(?:\.\d{1,2})?)$/), amount = m ? m[1] : '';   // e.g. 110 or £110
-  const url = PAYPAL_ME + (amount ? '/' + amount + 'GBP' : '');
+  // Per-person rooms: the household pays for each of its named guests.
+  const each = Number(amount), people = r.perPerson ? (state.invite?.guests?.length || 1) : 1;
+  const total = amount ? (Math.round(each * people * 100) / 100).toString() : '';
+  const url = PAYPAL_ME + (total ? '/' + total + 'GBP' : '');
   return `<div class="pay-note ${cls}"><p>${esc(t('payRoom'))}</p>
     <a class="btn-link" href="${url}" target="_blank" rel="noopener">${esc(t('payBtn'))}</a></div>`;
 }

@@ -15,7 +15,7 @@
  *   Rooms.price    free text, e.g. "£180 per night".
  *   Guests.room_price  optional per-household override: blank = the suite's price, "free" = no charge,
  *                  anything else is shown instead (e.g. a share of a suite that several households use).
- *                  Several households can be given the same room_id; each answers for itself.
+ *                  Several households can be given the same room_id; each answers for itself, and its price is then shown per person ("£80 pp").
  *   Guests.language   "es" to show that household the site in Spanish (blank = English).
  *   Spanish text: any column ending in _es (e.g. Rooms.description_es, Menu.description_es) is used in place of
  *   the English column when the site is in Spanish. Night Before / Bridal Party have Spanish in columns C (and D).
@@ -158,10 +158,12 @@ function rows_(name) {
 function findInvite_(code) {
   var g = rows_('Guests').filter(function (r) { return normaliseCode_(r.code) === code; })[0];
   if (!g) return null;
-  var room = null;
+  var room = null, roomShared = false;
   var roomId = String(g.room_id || '').trim();
   if (roomId) {
     room = rows_('Rooms').filter(function (r) { return String(r.room_id).trim() === roomId; })[0] || null;
+    // A room given to more than one household is priced per person (shown as "£80 pp").
+    roomShared = rows_('Guests').filter(function (r) { return String(r.room_id || '').trim() === roomId; }).length > 1;
   }
   return {
     code: code,
@@ -169,6 +171,7 @@ function findInvite_(code) {
     plusOnesAllowed: Number(g.plus_ones_allowed) || 0,
     room: room,
     roomPrice: String(g.room_price || '').trim(),
+    roomShared: roomShared,
     nightBefore: String(g.night_before || '').trim() !== '',
     lang: String(g.language || '').trim().toLowerCase().indexOf('es') === 0 ? 'es' : 'en',
     bridalParty: bridalNames_(String(g.bridal_party || ''), String(g.guest_names).split(',').map(function (s) { return s.trim(); }).filter(String))
@@ -182,7 +185,7 @@ function publicInvite_(inv) {
     guests: inv.guests,
     plusOnesAllowed: inv.plusOnesAllowed,
     lang: inv.lang,
-    room: inv.room && roomForHousehold_(inv.room, inv.roomPrice),
+    room: inv.room && roomForHousehold_(inv.room, inv.roomPrice, inv.roomShared),
 
     // Party details are only sent to invited households, so they never appear in the public page.
     nightBefore: inv.nightBefore ? readNightBefore_() : null
@@ -197,8 +200,9 @@ function roomPublic_(room) {
 }
 
 /** The suite as this household sees it: their own price (or free) replaces the suite's price. */
-function roomForHousehold_(room, override) {
+function roomForHousehold_(room, override, shared) {
   var out = roomPublic_(room);
+  if (shared) out.perPerson = true;   // the price is per person when several households share the room
   if (/^(free|0|£?0(\.00)?|none|n\/a)$/i.test(override)) {
     out.free = true; out.price = ''; out.price_es = '';
   } else if (override) {

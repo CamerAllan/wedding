@@ -318,7 +318,7 @@ const STR = {
     roomNight: 'Night', roomPrice: 'Price', breakfastLabel: 'Breakfast', breakfastShort: 'Included, served 09:30-10:30 on the ground floor', checkoutLabel: 'Check-out', checkoutShort: 'By 11:00',
     roomIntro: 'We’d love you to join us staying at the castle, so we’ve saved a room for you.',
     roomQ: 'Would you like to book this room?', nbQ: 'Can you make it?', yourAnswer: 'Your answer', dietShort: 'Dietary', theWedding: 'The wedding', orderOfEvents: 'Order of events',
-    payRoom: 'Please pay here to reserve the room.', payBtn: 'Pay'
+    payRoom: 'Please pay here to reserve the room.', payBtn: 'Pay', perPerson: 'pp'
   },
   es: {
     when: 'Cuándo', where: 'Dónde',
@@ -351,7 +351,7 @@ const STR = {
     roomNight: 'Noche', roomPrice: 'Precio', breakfastLabel: 'Desayuno', breakfastShort: 'Incluido, se sirve de 09:30 a 10:30 en la planta baja', checkoutLabel: 'Salida', checkoutShort: 'Antes de las 11:00',
     roomIntro: 'Nos encantaría que os quedarais con nosotros en el castillo, así que os hemos reservado una habitación.',
     roomQ: '¿Queréis reservar esta habitación?', nbQ: '¿Podéis venir?', yourAnswer: 'Vuestra respuesta', dietShort: 'Dieta', theWedding: 'La boda', orderOfEvents: 'Programa',
-    payRoom: 'Por favor, pagad aquí para reservar la habitación.', payBtn: 'Pagar'
+    payRoom: 'Por favor, pagad aquí para reservar la habitación.', payBtn: 'Pagar', perPerson: 'por persona'
   }
 };
 function t(key, vars) {
@@ -524,6 +524,9 @@ document.addEventListener('scroll', e => {
   tr.closest('.room-gallery').querySelectorAll('.rg-dots span').forEach((d, k) => d.classList.toggle('on', k === i));   // the track sits inside the frame, so look up to the gallery
 }, true);
 
+/** A shared room is priced per person: "£80 pp" (Spanish "80 £ por persona"). */
+function perPerson(r, price) { return price && r && r.perPerson ? price + ' ' + t('perPerson') : price; }
+
 /** Prices typed as a bare number (e.g. 80 or 80.5) are shown in pounds: "£80" in English, "80 £" in Spanish.
     Anything else (e.g. "£180 per night") is shown as typed. */
 function money(v) {
@@ -548,7 +551,7 @@ function splitDetails(text) {
 /** A room: photo(s), name, description, then night / price / breakfast rows. Values are escaped here. */
 function roomCardHtml(r) {
   // Guests whose room is on us see no price row at all, and nothing about payment.
-  const price = r.free ? '' : money(L(r, 'price'));
+  const price = r.free ? '' : perPerson(r, money(L(r, 'price')));
   // Photos and details sit side by side in a wide card (photos on the right), stacked in a narrow one.
   const photos = roomPhotosHtml(r);
   return `<div class="room-layout${photos ? '' : ' no-photos'}">
