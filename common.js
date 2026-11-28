@@ -521,7 +521,7 @@ document.addEventListener('click', e => {
 document.addEventListener('scroll', e => {
   const tr = e.target; if (!tr.classList || !tr.classList.contains('rg-track')) return;
   const i = Math.round(tr.scrollLeft / tr.clientWidth);
-  tr.parentElement.querySelectorAll('.rg-dots span').forEach((d, k) => d.classList.toggle('on', k === i));
+  tr.closest('.room-gallery').querySelectorAll('.rg-dots span').forEach((d, k) => d.classList.toggle('on', k === i));   // the track sits inside the frame, so look up to the gallery
 }, true);
 
 /** Prices typed as a bare number (e.g. 80 or 80.5) are shown in pounds: "£80" in English, "80 £" in Spanish.
