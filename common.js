@@ -204,7 +204,7 @@ function showGate() {
 }
 
 // Cache the invite for this browser session so moving between pages doesn't wait on Google each time.
-function cacheInvite(code, data) { try { sessionStorage.setItem('invite2:' + code, JSON.stringify(data)); } catch (e) {} }
+function cacheInvite(code, data) { try { sessionStorage.setItem('invite2:' + code, JSON.stringify(data)); sessionStorage.setItem('invite2t:' + code, String(Date.now())); } catch (e) {} }
 const invitePromises = {};
 const refreshed = {};
 function getInvite(code) {
@@ -213,7 +213,11 @@ function getInvite(code) {
   let hit = null;
   try { hit = sessionStorage.getItem('invite2:' + code); } catch (e) {}
   if (hit) {
-    if (!refreshed[code]) {
+    // Only re-check with Google if our copy is more than 5 minutes old, so moving between pages doesn't
+    // send a request every time (fewer requests keeps the backend quick when lots of guests are on at once).
+    let age = Infinity;
+    try { age = Date.now() - Number(sessionStorage.getItem('invite2t:' + code) || 0); } catch (e) {}
+    if (age > 5 * 60 * 1000 && !refreshed[code]) {
       refreshed[code] = true;
       apiGet(code, getVerified()?.name).then(fresh => {
         if (!fresh.ok) return;

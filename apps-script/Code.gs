@@ -137,7 +137,30 @@ function doPost(e) {
 
 // ---------- helpers ----------
 
-function ss_() { return SpreadsheetApp.openById(SHEET_ID); }
+// Open the spreadsheet once per request (opening it is slow), not once per tab read.
+var SS_ = null;
+function ss_() { return SS_ || (SS_ = SpreadsheetApp.openById(SHEET_ID)); }
+
+/** A tab's values (or display values), read at most once per request, and kept in Google's cache for a minute
+ *  so busy periods mostly skip the spreadsheet. Responses is never cached, so RSVPs always show straight away.
+ *  Edits to other tabs show up on the site within about a minute. Returns a fresh copy each time. */
+var MEMO_ = {};
+var CACHE_SECONDS = 60;
+function values_(name, display) {
+  var key = 'v2:' + name + (display ? ':d' : '');
+  if (!MEMO_[key]) {
+    var cache = name === 'Responses' ? null : CacheService.getScriptCache();
+    var hit = cache && cache.get(key);
+    if (!hit) {
+      var sheet = ss_().getSheetByName(name);
+      var range = sheet ? sheet.getDataRange() : null;
+      hit = JSON.stringify(range ? (display ? range.getDisplayValues() : range.getValues()) : null);
+      if (cache && hit.length < 90000) { try { cache.put(key, hit, CACHE_SECONDS); } catch (e) {} }
+    }
+    MEMO_[key] = hit;
+  }
+  return JSON.parse(MEMO_[key]);
+}
 
 function json_(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
@@ -146,7 +169,7 @@ function json_(obj) {
 function normaliseCode_(c) { return String(c || '').trim().toUpperCase(); }
 
 function rows_(name) {
-  var values = ss_().getSheetByName(name).getDataRange().getValues();
+  var values = values_(name, false) || [[]];
   var header = values.shift().map(function (h) { return String(h).trim(); });
   return values.map(function (r) {
     var o = {};
@@ -156,14 +179,15 @@ function rows_(name) {
 }
 
 function findInvite_(code) {
-  var g = rows_('Guests').filter(function (r) { return normaliseCode_(r.code) === code; })[0];
+  var guests = rows_('Guests');
+  var g = guests.filter(function (r) { return normaliseCode_(r.code) === code; })[0];
   if (!g) return null;
   var room = null, roomShared = false;
   var roomId = String(g.room_id || '').trim();
   if (roomId) {
     room = rows_('Rooms').filter(function (r) { return String(r.room_id).trim() === roomId; })[0] || null;
     // A room given to more than one household is priced per person (shown as "£80 pp").
-    roomShared = rows_('Guests').filter(function (r) { return String(r.room_id || '').trim() === roomId; }).length > 1;
+    roomShared = guests.filter(function (r) { return String(r.room_id || '').trim() === roomId; }).length > 1;
   }
   return {
     code: code,
@@ -221,8 +245,8 @@ function bridalNames_(cell, guests) {
 
 /** Itinerary rows this household is invited to, in sheet order. */
 function readItinerary_(invite) {
-  var sheet = ss_().getSheetByName('Itinerary');
-  if (!sheet) return [];
+  var values = values_('Itinerary', true);
+  if (!values) return [];
   var invitedTo = {
     everyone: true, '': true,
     night_before: invite.nightBefore,
@@ -230,7 +254,6 @@ function readItinerary_(invite) {
     bridal_party: invite.bridalParty.length > 0
   };
   // Display values, so times/dates Sheets has auto-converted come through as shown (not "Sat Dec 30 1899 …").
-  var values = sheet.getDataRange().getDisplayValues();
   var header = values.shift().map(function (h) { return String(h).trim(); });
   var rows = values.map(function (r) { var o = {}; header.forEach(function (h, i) { o[h] = r[i]; }); return o; });
   return rows
@@ -246,9 +269,8 @@ function readItinerary_(invite) {
 
 /** Rows of the Events tab, keyed by event id (display values, so nothing gets turned into a date). */
 function eventRows_() {
-  var sheet = ss_().getSheetByName('Events');
-  if (!sheet) return {};
-  var values = sheet.getDataRange().getDisplayValues();
+  var values = values_('Events', true);
+  if (!values) return {};
   var header = values.shift().map(function (h) { return String(h).trim(); });
   var out = {};
   values.forEach(function (r) {
@@ -282,9 +304,9 @@ function readNightBefore_() {
              title_es: ev.title_es, when_es: ev.when_es, where_es: ev.location_es, details_es: ev.details_es };
   }
   var out = {};
-  var sheet = ss_().getSheetByName('Night Before');
-  if (!sheet) return { title: 'Night-before party' };
-  sheet.getDataRange().getValues().slice(1).forEach(function (r) {
+  var nb = values_('Night Before', false);
+  if (!nb) return { title: 'Night-before party' };
+  nb.slice(1).forEach(function (r) {
     var k = String(r[0] || '').trim().toLowerCase();
     if (k) { out[k] = String(r[1] || ''); out[k + '_es'] = String(r[2] || ''); }
   });
@@ -293,7 +315,7 @@ function readNightBefore_() {
 
 /** Menu: first three columns are course/option/description; every later column is a dietary requirement. */
 function readMenu_() {
-  var values = ss_().getSheetByName('Menu').getDataRange().getValues();
+  var values = values_('Menu', false);
   var header = values.shift().map(function (h) { return String(h).trim(); });
   // Every column after description is a dietary requirement, except translations (ending in _es).
   var dietCols = [];
@@ -393,9 +415,8 @@ function notify_(invite, header, rows, isUpdate, menu) {
 
 /** Reads a value from the Settings tab (column A = name, column B = value). */
 function setting_(name) {
-  var sheet = ss_().getSheetByName('Settings');
-  if (!sheet) return '';
-  var rows = sheet.getDataRange().getValues();
+  var rows = values_('Settings', false);
+  if (!rows) return '';
   for (var i = 0; i < rows.length; i++) {
     if (String(rows[i][0]).trim().toLowerCase() === name) return String(rows[i][1] || '').trim();
   }
